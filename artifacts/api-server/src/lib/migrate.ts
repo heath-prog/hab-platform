@@ -277,6 +277,123 @@ export async function runMigrations(): Promise<void> {
     );
   `);
 
+  // ── CRM tables (WP1) — additive, per outputs/CRM_DATA_MODEL.md §7 ────────
+  // Tenant config (stages, kpiDefs, onboardingTemplate, complianceFields,
+  // masteryLevels, modules, weekThemes) lives in JSONB so pipelines stay
+  // config-driven per tenant (hab / bread / future SaaS clients).
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS tenants (
+      id            TEXT PRIMARY KEY,
+      name          TEXT NOT NULL,
+      entity_label  TEXT NOT NULL DEFAULT 'Account',
+      features      JSONB NOT NULL DEFAULT '{}',
+      config        JSONB NOT NULL DEFAULT '{}',
+      created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  // A CRM client = a shop (hab tenant) / customer (other tenants).
+  // "acquisition" in flags marks shops whose owner may sell to Heath.
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS crm_clients (
+      id                      TEXT PRIMARY KEY,
+      tenant_id               TEXT NOT NULL REFERENCES tenants(id),
+      name                    TEXT NOT NULL,
+      stage_id                TEXT NOT NULL DEFAULT 'prospect',
+      is_seed                 BOOLEAN NOT NULL DEFAULT FALSE,
+      seed_note               TEXT,
+      emails                  TEXT[] NOT NULL DEFAULT '{}',
+      phone                   TEXT,
+      address                 TEXT,
+      notes                   TEXT,
+      flags                   TEXT[] NOT NULL DEFAULT '{}',
+      calendar_color_id       SMALLINT,
+      slots                   JSONB NOT NULL DEFAULT '[]',
+      start_date              DATE,
+      week_override           SMALLINT,
+      docs_delivered          JSONB NOT NULL DEFAULT '{}',
+      onboarding_generated_at TIMESTAMPTZ,
+      created_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at              TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS crm_contacts (
+      id         TEXT PRIMARY KEY,
+      client_id  TEXT NOT NULL REFERENCES crm_clients(id) ON DELETE CASCADE,
+      name       TEXT NOT NULL,
+      role       TEXT,
+      email      TEXT,
+      phone      TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  // progress: {"M1":"done","M2":"ip"} — module key -> "" | "ip" | "done".
+  // level 1..5 = Rookie / Advisor / Closer / Pro / Champion.
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS crm_advisors (
+      id         TEXT PRIMARY KEY,
+      client_id  TEXT NOT NULL REFERENCES crm_clients(id) ON DELETE CASCADE,
+      name       TEXT NOT NULL,
+      level      SMALLINT NOT NULL DEFAULT 1 CHECK (level BETWEEN 1 AND 5),
+      progress   JSONB NOT NULL DEFAULT '{}',
+      notes      TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  // kpi_values keyed by tenant kpiDef id ({"auth":78,"aro":612});
+  // missing key = not measured that week. Append-only by convention.
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS crm_kpi_snapshots (
+      id            TEXT PRIMARY KEY,
+      client_id     TEXT NOT NULL REFERENCES crm_clients(id) ON DELETE CASCADE,
+      snapshot_date DATE NOT NULL,
+      kpi_values    JSONB NOT NULL DEFAULT '{}',
+      created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  // fields keyed by tenant complianceFields id — HAB: fire_next, bar_num,
+  // bar_exp, ins_carrier, ins_exp, biz_num, biz_exp.
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS crm_compliance (
+      client_id  TEXT PRIMARY KEY REFERENCES crm_clients(id) ON DELETE CASCADE,
+      fields     JSONB NOT NULL DEFAULT '{}',
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS crm_onboarding_tasks (
+      id         TEXT PRIMARY KEY,
+      client_id  TEXT NOT NULL REFERENCES crm_clients(id) ON DELETE CASCADE,
+      position   INTEGER NOT NULL DEFAULT 0,
+      label      TEXT NOT NULL,
+      done       BOOLEAN NOT NULL DEFAULT FALSE,
+      done_date  DATE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS crm_activity (
+      id         BIGSERIAL PRIMARY KEY,
+      client_id  TEXT NOT NULL REFERENCES crm_clients(id) ON DELETE CASCADE,
+      ts         TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      text       TEXT NOT NULL
+    );
+  `);
+
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS idx_crm_clients_tenant ON crm_clients(tenant_id);
+    CREATE INDEX IF NOT EXISTS idx_crm_kpi_snapshots_client_date ON crm_kpi_snapshots(client_id, snapshot_date DESC);
+    CREATE INDEX IF NOT EXISTS idx_crm_activity_client_ts ON crm_activity(client_id, ts DESC);
+  `);
+
   // Set Heath Blake as super_admin (idempotent). The same rule also runs at
   // every session load in GET /api/users/me — see lib/superAdmin.ts — so a
   // fresh sign-in does not have to wait for a server restart.

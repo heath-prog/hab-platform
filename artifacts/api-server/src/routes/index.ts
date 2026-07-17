@@ -8,6 +8,7 @@ import reviewQueueRouter   from "./reviewQueue";
 import portfolioRouter     from "./portfolio";
 import adminRouter         from "./admin";
 import dealStructureRouter from "./dealStructure";
+import crmRouter           from "./crm";
 
 const router: IRouter = Router();
 
@@ -19,6 +20,7 @@ router.use("/documents",      documentsRouter);
 router.use("/review-queue",   reviewQueueRouter);
 router.use("/portfolio",      portfolioRouter);
 router.use("/deal-structure", dealStructureRouter);
+router.use("/crm",            crmRouter);
 // admin routes mount their own sub-paths (/admin/* and /billing/*)
 router.use("/",               adminRouter);
 
