@@ -1,0 +1,38 @@
+Fix 3 critical bugs. Read the relevant files before making changes — do not guess at structure.
+
+---
+
+BUG 1: Business name shows "Business" instead of actual name in sidebar top-left
+
+In the BusinessWorkspace component (and whatever sidebar/nav component renders the top-left business name), the business name is not being pulled from the loaded business data. It shows the generic word "Business" for Prestige Auto Works. Find where the sidebar header/business name is rendered and make sure it reads from the current business object's `name` field. This must work for ALL businesses dynamically.
+
+---
+
+BUG 2: App.tsx loads BusinessWorkspace from localStorage instead of the database
+
+In `artifacts/acquisition-dashboard/src/App.tsx`, the routing code for `/business/:id` calls `loadPortfolio()` which reads from localStorage. This means any business that exists in the DB but not in the user's localStorage (like Prestige Auto Works on a fresh browser) will load with missing or empty data, causing missing tabs, missing business name, and broken workspace.
+
+Fix: When routing to a business workspace, load the business data from the database using `loadPortfolioFromDB()` (already exists in `artifacts/acquisition-dashboard/src/lib/storage.ts`). The workspace must load from DB so every business in every browser session gets identical full functionality.
+
+This is why Prestige Auto Works looks broken — it's not in localStorage on this browser, so the workspace has no data. True Blue works because it was set up when localStorage was populated.
+
+---
+
+BUG 3: Document upload shows "Configure N8n webhook" banner and fails with "No N8n webhook configured"
+
+In the `AIDocumentUpload` component (or wherever the document upload UI lives), there is a yellow banner that says "Configure N8n webhook in Settings to enable AI agents." This banner should be REMOVED — the document processor uses OpenAI directly (OPENAI_API_KEY is now set and working) and does not require n8n to process documents.
+
+n8n is only needed for Google Drive sync AFTER processing. The AI analysis itself (extracting data, confidence scoring, filing to review queue) runs on OpenAI alone.
+
+Fix:
+1. Remove the "Configure N8n webhook in Settings to enable AI agents" banner entirely from the upload dropzone UI
+2. In the document processor backend (`artifacts/api-server/src/lib/documentProcessor.ts` or similar), the upload should proceed and run OpenAI analysis even when no n8n webhook URL is configured. Only the Drive sync step should be skipped when n8n is not configured.
+3. After processing, if n8n is not configured, show a small informational note (not a blocking error): "Document processed. Drive sync unavailable — configure n8n webhook in Integrations to enable."
+4. The file entry should NOT show "No N8n webhook configured — open Settings." as a failure state. It should show the AI processing result (extracted data, confidence score).
+
+---
+
+IMPORTANT: After making these fixes, verify:
+- Navigating to Prestige Auto Works workspace shows "Prestige Auto Works" in the top-left, with all tabs (Overview, Documents, Contacts, Financials, Lease, Compliance, etc.) identical to True Blue
+- The Documents page for any business no longer shows the yellow n8n banner in the upload dropzone
+- Uploading a document runs OpenAI processing and returns a result, regardless of whether n8n is configured

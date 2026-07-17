@@ -1,0 +1,611 @@
+You are the world’s most sophisticated product designer, UX architect, behavioral design strategist, systems thinker, and premium SaaS interface designer.
+
+You are designing a category-defining AI-powered Ownership Operating System for automotive repair shop acquisitions, operations, financial management, reporting, scale, and exit planning.
+
+This is not a generic dashboard.
+This is a live-deal command center and post-close operator platform for real-world business ownership.
+
+The platform must guide users from:
+initial conversation → NDA → LOI → transaction structure decision → due diligence → entity setup if needed → close → Day 1 takeover → 30-day transition → ongoing financial management → AI reporting → scale readiness → exit readiness.
+
+This product is being used on real acquisitions.
+The interface must feel credible for:
+- buyers
+- sellers
+- attorneys
+- CPAs
+- bankers
+- private equity-minded operators
+- acquisition advisors
+- automotive shop owners
+- lenders
+- future investors
+- future exit partners
+
+It must look and feel:
+- premium
+- intelligent
+- smooth
+- highly strategic
+- addictive in a productivity-driven way
+- trustworthy enough for financial and legal workflows
+- dynamic enough to feel state of the art
+
+==================================================
+PRIMARY PRODUCT OBJECTIVE
+==================================================
+
+Design an app that makes buying, operating, scaling, and eventually exiting an automotive repair business feel:
+- clear
+- guided
+- achievable
+- powerful
+- exciting
+- rewarding
+
+The app should play to the psychology of:
+- progress
+- control
+- confidence
+- momentum
+- trust
+- achievement
+- wealth-building
+
+Every major screen should answer:
+- What stage am I in?
+- What is blocking me?
+- What should I do next?
+- How close am I to winning?
+- What do the numbers say today?
+- Is this business becoming more valuable?
+
+==================================================
+PLATFORM EVOLUTION RULE
+==================================================
+
+This app must NOT end at closing.
+
+Closing is not the end of the workflow.
+Closing is the transition point into ownership operations.
+
+The app must include a deliberate handoff from acquisition mode into post-close operating mode.
+
+After close, the shop must transition into a new primary dashboard environment called:
+
+“Financial Management”
+or
+“Operating Command Center”
+
+This post-close dashboard becomes the ongoing home base of the product.
+
+The acquisition workflow should remain archived and accessible, but the product’s main state after close should become:
+- daily financial management
+- reporting
+- reconciliation
+- KPI tracking
+- operational analytics
+- enterprise value building
+
+==================================================
+CRITICAL NEW POST-CLOSE FEATURE
+==================================================
+
+The 30-day plan must not just be a checklist.
+It must be a structured transition engine that finalizes the acquisition and moves the user into the next operational system.
+
+The 30-day plan must include:
+- final close confirmation
+- completion of transition tasks
+- transfer of control verification
+- financial system activation
+- accounting and reporting activation
+- bank/reporting integration validation
+- vendor expense ingestion setup
+- post-close baseline snapshot
+- launch of the ongoing financial dashboard
+
+At the end of the 30-day plan, the app should trigger a milestone such as:
+“Operating Dashboard Activated”
+or
+“Financial Management Live”
+
+This should feel like the owner has successfully moved from buyer to operator.
+
+==================================================
+POST-CLOSE STAGE ARCHITECTURE
+==================================================
+
+Add a new master lifecycle structure:
+
+LAYER 1 — ACQUISITION
+- sourcing
+- NDA
+- LOI
+- diligence
+- deal structure
+- close readiness
+
+LAYER 2 — TRANSITION
+- close
+- Day 1 takeover
+- 30-day plan
+- account transfers
+- system activation
+- baseline setup
+- staff stabilization
+- reporting activation
+
+LAYER 3 — OPERATIONS / FINANCIAL MANAGEMENT
+- daily financial dashboard
+- reconciliations
+- P&L tracking
+- balance sheet tracking
+- cash flow
+- expense management
+- vendor invoice ingestion
+- bank activity
+- QuickBooks integration
+- Tekmetric integration
+- parts supplier integrations
+- payroll burden
+- margin analysis
+- operational KPIs
+
+LAYER 4 — REPORTING / ENTERPRISE VALUE
+- lender-ready reports
+- investor-ready reports
+- board-quality summaries
+- roll-up and multi-store analytics
+- valuation support
+- diligence package generation for future buyers or partners
+- scale readiness analytics
+- exit readiness
+
+LAYER 5 — FUTURE CAPITAL MARKETS / IPO-GRADE DIRECTION
+Reserve architecture for:
+- consolidated entities
+- audited-style reporting readiness
+- store group rollups
+- normalized EBITDA views
+- entity-by-entity and group-level performance
+- capital stack / investment tracking
+- institutional reporting packages
+
+==================================================
+FINANCIAL MANAGEMENT DASHBOARD
+==================================================
+
+Create a new primary dashboard called:
+
+“Financial Management”
+or
+“Ownership Finance OS”
+
+This must become the main post-close dashboard.
+
+It should feel:
+- elite
+- banker-grade
+- CFO-grade
+- private-equity-grade
+- clean enough for daily use
+- powerful enough for strategic decisions
+
+It must include:
+- revenue
+- labor revenue
+- parts revenue
+- other revenue
+- COGS
+- labor COGS
+- parts COGS
+- gross profit
+- gross margin
+- payroll
+- rent
+- utilities
+- marketing
+- insurance
+- supplies
+- other expenses
+- EBITDA
+- EBITDA margin
+- depreciation
+- interest
+- taxes
+- net income
+- net margin
+- car count
+- ARO
+- cash position
+- accounts payable
+- vendor balances
+- reconciled vs unreconciled expenses
+- balance sheet summary
+- date range controls
+- daily / weekly / monthly / quarterly / trailing 12-month views
+
+The dashboard should support:
+- single shop mode
+- future multi-shop rollup mode
+- actual vs target
+- actual vs prior period
+- actual vs budget
+- variance explanations
+- AI-generated performance commentary
+
+==================================================
+DATA INGESTION / INTEGRATION LAYER
+==================================================
+
+The product must include a formal data ingestion architecture.
+
+The app will use webhooks and integrations to receive data from:
+- Tekmetric
+- parts suppliers
+- vendor invoices
+- vendor statements
+- utility statements
+- bank reports
+- bank statements
+- QuickBooks (ideally via integration)
+- payroll systems
+- manually uploaded financial documents
+- future accounting and ERP connections
+
+Design a dedicated subsystem called:
+“Data Intake & Mapping”
+or
+“Financial Data Pipeline”
+
+This subsystem should:
+- receive data from integrations and uploads
+- classify source type
+- assign document/source to correct entity and store
+- map transactions to chart-of-accounts-style categories
+- identify duplicates
+- reconcile payments where possible
+- flag exceptions
+- update real-time reports
+- maintain audit trail / source traceability
+
+Every record should have source awareness:
+- uploaded manually
+- synced from QuickBooks
+- pulled from Tekmetric
+- received from supplier webhook
+- imported from bank feed
+- inferred by AI
+
+==================================================
+AI ACCOUNTING / RECONCILIATION ENGINE
+==================================================
+
+The reporting system must include an AI agent layer that automatically:
+
+- reads uploaded invoices and statements
+- extracts vendor, date, amount, due date, account category, and balance
+- maps expenses to categories
+- detects whether invoice appears paid or unpaid
+- matches invoices against bank activity or QuickBooks records when available
+- identifies missing documentation
+- flags anomalies
+- updates financial dashboards
+- supports real-time P&L and balance sheet views
+
+This should function as an AI-assisted bookkeeping and reporting layer.
+
+The user experience should make this feel like:
+“A smart finance team is watching the books in real time.”
+
+The AI should generate:
+- reconciliation status
+- confidence score
+- exception alerts
+- suggested categorization
+- balance sheet impact
+- P&L impact
+- cash flow impact
+
+==================================================
+REPORTING SYSTEM REQUIREMENT
+==================================================
+
+The reporting section is a major product area and must be designed as a premium reporting engine.
+
+This section does not currently exist and must now be built as a core next-phase product module.
+
+Create a dedicated area called:
+
+“Reports & Analytics”
+or
+“Intelligence & Reporting”
+
+This module must produce sophisticated reports and AI analytics that can be used for:
+- future acquisitions
+- future investors
+- future lenders
+- future exit partners
+- strategic planning
+- multi-location scale
+- enterprise valuation support
+- institutional reporting maturity
+- eventual IPO-readiness direction if desired
+
+Reports should include:
+- daily flash report
+- weekly operator scorecard
+- monthly management report
+- lender-ready financial summary
+- investor update report
+- acquisition-readiness report for next store
+- normalized EBITDA report
+- margin improvement report
+- expense trend report
+- vendor concentration report
+- customer concentration report
+- enterprise value drivers dashboard
+- exit readiness report
+
+==================================================
+AI ANALYTICS REQUIREMENT
+==================================================
+
+The app should not just display numbers.
+It must interpret them.
+
+Create an AI analytics layer that:
+- explains performance
+- identifies trends
+- spots risks
+- highlights opportunities
+- compares periods
+- recommends operational actions
+- supports forecasting
+- supports valuation thinking
+- helps the owner tell the financial story of the business
+
+Examples:
+- “Labor gross profit improved 4.2 points over the prior 30 days.”
+- “Parts margin compression appears linked to supplier mix changes.”
+- “Utilities are trending above baseline and require review.”
+- “Bank activity suggests three unreconciled vendor payments.”
+- “ARO is rising while car count is flat, improving revenue efficiency.”
+- “Current performance supports stronger lender presentation for future expansion.”
+
+The user should feel:
+“I am not just seeing data. I am seeing what it means.”
+
+==================================================
+30-DAY PLAN UPGRADE
+==================================================
+
+The 30-day plan must include a final stage called:
+
+“Activate Financial Management”
+
+This stage should include:
+- confirm close completed
+- verify entity/ownership structure finalized
+- verify bank access
+- verify QuickBooks access or connection
+- verify Tekmetric connection
+- verify vendor/supplier intake setup
+- verify payroll data path
+- verify utilities and recurring expenses entered
+- verify chart of accounts mapping framework
+- confirm opening balance sheet baseline
+- confirm first post-close daily report
+- confirm first post-close monthly P&L baseline
+- move shop from Acquisition Dashboard to Financial Management Dashboard
+
+The UI should make this feel like a launch sequence.
+
+Completion of this stage should unlock:
+- Reports & Analytics
+- AI Finance Agent
+- Financial Health Score
+- Scale Readiness indicators
+
+==================================================
+COMMAND CENTER HANDOFF LOGIC
+==================================================
+
+Once the acquisition is marked closed:
+- do not leave the user on a stale acquisition home page
+- guide them into the post-close dashboard
+- acquisition becomes a historical module
+- financial management becomes the default home state for that shop
+
+Show a polished transition message like:
+“Acquisition complete. Ownership systems are now live.”
+or
+“Welcome to operating mode.”
+
+==================================================
+DATA MODEL / SYSTEM THINKING
+==================================================
+
+Design the product architecture so that each shop eventually has:
+
+- acquisition history
+- diligence archive
+- close data
+- legal structure data
+- daily financial feed
+- vendor feed
+- bank feed
+- accounting feed
+- reporting layer
+- AI commentary layer
+- exit-readiness layer
+
+This must support future roll-up logic across multiple stores.
+
+==================================================
+MULTI-STORE / SCALE VISION
+==================================================
+
+Even if v1 is single-store, the architecture must anticipate:
+- multiple locations
+- multiple legal entities
+- group reporting
+- same-store comparisons
+- region/store manager views
+- investor rollups
+- enterprise dashboards
+- portfolio-level acquisitions
+- portfolio-level exit readiness
+
+The UX must feel like the product can scale from:
+1 shop → 5 shops → 25 shops → institutional platform
+
+==================================================
+UX / VISUAL DIRECTION FOR FINANCE MODULE
+==================================================
+
+The finance module should feel:
+- premium
+- exact
+- powerful
+- calm
+- trusted
+- highly professional
+
+Do NOT make it feel like generic bookkeeping software.
+Do NOT make it feel like an accountant back office.
+Do NOT make it feel clunky.
+
+It should feel like:
+- modern finance intelligence
+- premium ownership control
+- strategic operating leverage
+
+Use:
+- elegant charts
+- deep table interactions
+- reconciled/unreconciled badges
+- source trace drill-downs
+- statement-to-transaction visibility
+- AI insight cards
+- trend summaries
+- professional export/report presentation
+
+==================================================
+BUYER / OPERATOR / ADVISOR ROLES
+==================================================
+
+Post-close roles should also evolve.
+
+Buyer/Admin becomes:
+- Owner / Operator / Portfolio Manager
+
+Additional future roles:
+- Controller
+- Bookkeeper
+- CFO
+- CPA
+- Store manager
+- Investor / board viewer
+- lender-read-only
+
+Permissions should support:
+- who can view reports
+- who can upload docs
+- who can approve mappings
+- who can see bank-level detail
+- who can access consolidated reporting
+
+==================================================
+REPORT EXPORT / PRESENTATION REQUIREMENT
+==================================================
+
+Reports must be designed for presentation and external use.
+
+Support future generation/export of:
+- PDF board packs
+- lender memos
+- investor updates
+- diligence packages
+- acquisition financing packages
+- performance summaries
+- valuation support decks
+
+The reports must look clean enough to present externally.
+
+==================================================
+BEHAVIORAL DESIGN FOR FINANCIALS
+==================================================
+
+The post-close financial UX should create:
+- daily engagement
+- trust in the numbers
+- satisfaction from reconciliation progress
+- pride from stronger margins
+- motivation from improved value creation
+
+Use patterns like:
+- “92% of current month expenses reconciled”
+- “3 vendor statements still need review”
+- “Cash flow confidence improved”
+- “Your first lender-ready monthly report is available”
+- “Current margin profile improves expansion readiness”
+
+This is executive gamification, not childish gamification.
+
+==================================================
+DELIVERABLES
+==================================================
+
+Produce:
+1. updated full information architecture
+2. post-close transition flow
+3. upgraded 30-day plan with financial activation stage
+4. Financial Management dashboard
+5. Data Intake & Mapping subsystem
+6. AI reconciliation and bookkeeping workflow UX
+7. Reports & Analytics center
+8. AI commentary/insight framework
+9. multi-store-ready data architecture
+10. reporting/export system concept
+11. wireframes for:
+   - post-close dashboard handoff
+   - Financial Management home
+   - invoice/statement intake screen
+   - reconciliation center
+   - reports & analytics page
+   - lender/investor-ready report view
+12. component specs for:
+   - financial KPI cards
+   - source trace cards
+   - reconciliation badges
+   - AI insight panels
+   - report builder cards
+   - variance tables
+13. UX rationale for why this creates a compelling daily operating system
+
+==================================================
+EXECUTION RULES
+==================================================
+
+- Do not stop product thinking at close.
+- Treat close as the handoff into operating mode.
+- Build the financial management system as a core product pillar.
+- Build reporting as a premium strategic intelligence module.
+- Design every key screen to look screenshot-worthy.
+- Make the system feel capable of supporting future investors, lenders, exits, and IPO-grade reporting maturity.
+- Avoid generic dashboard starter-kit design.
+- Avoid generic accounting software UI.
+- Make this feel like the ownership operating system for serious automotive entrepreneurs.
+
+FINAL INSTRUCTION
+
+Design this platform as if it will become the dominant AI operating system for buying, operating, scaling, and exiting independent automotive repair businesses in the United States.
+
+It should help an owner close a deal, take over the shop, manage the books, improve the economics, raise more capital, acquire the next shop, and eventually build an enterprise.
+
+Make it elegant.
+Make it serious.
+Make it powerful.
+Make it future-proof.

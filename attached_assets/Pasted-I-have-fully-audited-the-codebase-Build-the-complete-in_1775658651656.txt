@@ -1,0 +1,39 @@
+I have fully audited the codebase. Build the complete invite + onboarding flow in ONE pass. Exact file names below — no exploration needed.
+
+CONTEXT: email.ts uses nodemailer+Gmail (GMAIL_USER + GMAIL_APP_PASSWORD env vars). Clerk handles auth. PortfolioHome uses loadPortfolio/savePortfolio from @/lib/storage (localStorage). IntakeWizard component exists at @/components/IntakeWizard. App routing: default=PortfolioHome, /admin=AdminConsole, /b/:id=BusinessWorkspace. PostgreSQL DB already has: deal_users, document_uploads, integration_configs, review_queue_items.
+
+PART 1 — INVITE TOKEN DB + API (api-server)
+
+Find where CREATE TABLE IF NOT EXISTS statements live (likely api-server/src/lib/db.ts or similar) and add this table: CREATE TABLE IF NOT EXISTS invite_tokens (id SERIAL PRIMARY KEY, token TEXT NOT NULL UNIQUE, email TEXT NOT NULL, name TEXT NOT NULL, role TEXT NOT NULL, invited_by TEXT, expires_at TIMESTAMPTZ NOT NULL, used_at TIMESTAMPTZ, created_at TIMESTAMPTZ DEFAULT NOW());
+
+In api-server/src/routes/email.ts add 3 new endpoints:
+
+POST /send-invite (auth NOT required — the invitor is already authenticated by the frontend but we allow it): body={email,name,role,invitedBy}. Generate token with crypto.randomBytes(32).toString('hex'). Set expires_at=NOW()+1hour. Insert into invite_tokens. Build inviteUrl = (process.env.APP_URL || req.protocol+'://'+req.get('host'))+'/join?token='+token. Send HTML email via the existing Gmail nodemailer pattern with: subject "You're invited to HAB Dashboard", a prominent CTA button linking to inviteUrl, body text explaining the link expires in 1 hour and they were invited by invitedBy. Return {success:true}.
+
+GET /validate-invite?token=xxx (no auth): look up token. Return 404 if missing, 410 with {error:'expired'} if used_at is set or expires_at<NOW(), else return {valid:true,email,name,role}.
+
+POST /consume-invite (requires Clerk auth — use existing requireAuth middleware): body={token}. Validate token same as above. Set used_at=NOW(). Upsert into deal_users using the authenticated Clerk user's ID+email+name from token, with role from invite_tokens. Return {success:true,role}.
+
+Make sure all 3 routes are reachable (check api-server/src/routes/index.ts that email router is mounted at /api/email).
+
+PART 2 — UPDATE SIDEBAR INVITE MODAL
+
+In artifacts/acquisition-dashboard/src/components/Sidebar.tsx, find the Add Team Member modal submit handler. Replace the useCreateUser call with a direct authFetch call to POST /api/email/send-invite with {email, name, role, invitedBy: dealUser?.name ?? 'Your team'}. Change success toast to "Invite sent to [email] — link expires in 1 hour". The deal_users record is now created on accept, not on invite.
+
+PART 3 — JOIN PAGE
+
+Create artifacts/acquisition-dashboard/src/pages/JoinPage.tsx. On mount read ?token= from URL. Call GET /api/email/validate-invite?token=xxx (no auth header needed). If invalid/expired: show centered error card "This invite link has expired or is invalid. Ask the person who invited you to send a new one." If valid and user is NOT signed in: show centered card with heading "You've been invited to HAB Dashboard", subheading "Sign in or create an account to join as [role from token]", then render Clerk's <SignUp afterSignUpUrl={window.location.href} /> component which handles Google/Apple/Microsoft/email+password automatically. If valid and user IS signed in (isSignedIn===true): immediately call POST /api/email/consume-invite with the token using authFetch, then on success redirect to '/' using wouter's useLocation. Show a loading spinner while consuming. On consume error show toast and the error.
+
+In App.tsx, add a route BEFORE the AuthenticatedApp wrapper (outside the auth gate): <Route path="/join" component={JoinPage} />. This must be accessible without being signed in.
+
+PART 4 — PORTFOLIO ONBOARDING MODAL
+
+In artifacts/acquisition-dashboard/src/pages/PortfolioHome.tsx, add a 2-step onboarding modal that shows when loadPortfolio().businesses.length === 0 AND localStorage.getItem('portfolioSetupDismissed') !== 'true'.
+
+Step 1 "Name Your Portfolio": full-screen overlay modal. Heading "Welcome to HAB Dashboard". Sub "Give your portfolio a name to get started." Text input for portfolio name (default value: "My Acquisition Portfolio"). "Continue →" button — on click saves the name via savePortfolio({...portfolio, name: inputValue}) and advances to step 2.
+
+Step 2 "Add Your First Business": same modal overlay. Heading "Add your first business". Sub "You can always add more businesses later." Render the existing <IntakeWizard> component. When the wizard fires its onComplete callback (or when loadPortfolio().businesses.length > 0 after save), set localStorage.setItem('portfolioSetupDismissed','true') and close modal, then navigate to /b/[newBusinessId] using wouter's useLocation setter.
+
+On the normal PortfolioHome (after setup or if businesses already exist), add a visible "+ Add Business" button at the top right that reopens just step 2 of the wizard (the IntakeWizard in a modal) so additional businesses can be added any time.
+
+After all changes: restart frontend only, then take 3 screenshots: (1) Sidebar with invite modal open, (2) /join?token=test page showing the expired/invalid state, (3) PortfolioHome onboarding modal step 1.

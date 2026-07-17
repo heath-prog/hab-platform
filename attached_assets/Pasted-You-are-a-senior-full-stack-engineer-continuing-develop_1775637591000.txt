@@ -1,0 +1,391 @@
+You are a senior full-stack engineer continuing development of a production-grade SaaS platform called Healthy AI Business.
+
+This is a real system being built for live use during acquisition, operation, and scaling of automotive repair shops. This is not a prototype, not a demo, and not a mock product.
+
+Your job is to continue the build in structured phases. Do not skip ahead. Complete each phase cleanly and with production architecture in mind.
+
+==================================================
+PRODUCT IDENTITY
+==================================================
+
+Healthy AI Business is:
+- an acquisition platform
+- a deal execution engine
+- a business operating system
+- a financial management system
+- a reporting and investment platform
+- an exit strategy system
+
+It is NOT:
+- a course
+- a CRM
+- a generic dashboard
+
+The product must:
+- guide users step by step
+- reduce friction
+- eliminate missed steps
+- surface risk early
+- feel elite, polished, and psychologically engaging
+- be built for real execution
+
+==================================================
+NON-NEGOTIABLE PLATFORM RULE
+==================================================
+
+The platform owns all storage and provisioning.
+
+Users do NOT manually connect:
+- Google Drive
+- Google Sheets
+
+Instead:
+- the platform provisions storage automatically
+- the platform provisions data tables automatically
+- the app stores returned IDs
+- all workflows route through a centralized integration layer
+
+==================================================
+CURRENT SYSTEM CONTEXT
+==================================================
+
+The current system includes or is intended to include:
+
+1. Portfolio Command Center
+- users manage multiple businesses
+- each business has its own workspace
+- statuses include lead, active deal, operating shop, archived
+
+2. Deal Workflow System
+Includes:
+- overview dashboard
+- document checklist
+- call tracker
+- financial inputs
+- lease tracking
+- compliance tracking
+- risk tracker
+- day 1 checklist
+- 30-day execution plan
+
+3. Document Pipeline
+When uploaded:
+- send to n8n webhook
+- analyze by AI agents
+- store in Google Drive
+- extract structured data to Google Sheets / structured tables
+- return verification report
+
+Each document includes:
+- confidence score
+- findings
+- red flags
+- recommendations
+- extracted structured data
+
+Naming convention:
+{BusinessName} - {DocType} - {DocId} - {YYYY-MM-DD}.pdf
+
+4. Financial Dashboard
+Unlocked after:
+- bank connected
+- QuickBooks connected
+- Tekmetric connected
+- vendors connected
+- opening balance sheet complete
+
+5. Reporting Engine
+Must generate:
+- lender reports
+- investor updates
+- normalized EBITDA
+- exit readiness
+- acquisition readiness
+
+==================================================
+PHASED EXECUTION PLAN
+==================================================
+
+You must work in this order:
+
+PHASE 1 = Backbone + Central Config
+PHASE 2 = Portfolio Provisioning + Workspace Binding
+PHASE 3 = Document Pipeline Refactor
+PHASE 4 = Risk Engine Upgrade
+PHASE 5 = AI-Powered Add Business Intake
+PHASE 6 = Onboarding Gate + Founder Video State
+PHASE 7 = Final hardening / cleanup recommendations
+
+Do not jump to later phases until the earlier phase is structurally complete.
+
+==================================================
+PHASE 1 — CENTRAL INTEGRATION CONFIG SYSTEM
+==================================================
+
+Goal:
+Fix the current blocker by creating one centralized integration configuration system for all n8n and external workflow usage.
+
+Requirements:
+- create a secure integration config model/table
+- admin-only access
+- hidden from end users
+- support environment-aware values if needed
+- no hardcoded workflow URLs in feature code
+- create typed config access utilities/service layer
+- validate required keys
+- fail gracefully when missing
+
+Required config keys at minimum:
+- document_intake_webhook
+- document_retrieval_webhook
+- workflow_updates_webhook
+- financial_ingestion_webhook
+- expense_ingestion_webhook
+- reconciliation_webhook
+- reporting_webhook
+- portfolio_provisioning_webhook
+
+Deliverables for Phase 1:
+1. inspect the current codebase and summarize how integrations are currently handled
+2. create/modify the required schema/model
+3. create integration config service/utilities
+4. create admin-safe management approach
+5. replace hardcoded integration references where found
+6. show exactly what files changed
+7. identify anything still stubbed
+
+==================================================
+PHASE 2 — PORTFOLIO PROVISIONING + WORKSPACE BINDING
+==================================================
+
+Goal:
+When a portfolio is created, or when the first business is added to an unprovisioned portfolio, the app must call n8n to provision platform-owned storage and data resources.
+
+Required provisioning structure:
+
+/Portfolios/{Portfolio Name}/
+  /Businesses/{Business Name}/
+    /Acquisition
+    /Due Diligence
+    /Financials
+    /Legal
+    /Lease
+    /Licensing
+    /Vendors
+    /Post-Close
+    /Reports
+
+Requirements:
+- call portfolio provisioning webhook from central integration config
+- persist returned IDs
+- mark provisioning status
+- prevent duplicate provisioning
+- support admin re-run if designed
+- store timestamps and error states
+
+Data that should be persisted includes:
+- portfolio drive root folder id
+- business root folder ids
+- folder map
+- sheet ids / structured table ids
+- provisioning status
+- provisioning started/completed timestamps
+- provisioning error message if any
+
+Deliverables for Phase 2:
+1. inspect current portfolio/business creation flow
+2. identify insertion point for provisioning
+3. implement provisioning trigger logic
+4. persist returned IDs and status
+5. update UI states to reflect provisioned / pending / failed
+6. list all files changed
+7. note any assumptions or missing backend dependencies
+
+==================================================
+PHASE 3 — DOCUMENT PIPELINE REFACTOR
+==================================================
+
+Goal:
+Refactor document upload so the app uses the central integration config and binds all uploaded docs to the platform-owned storage architecture.
+
+Requirements:
+- document upload must route through document_intake_webhook
+- store local upload metadata first
+- track upload state
+- store returned analysis payload
+- preserve source traceability
+- link documents to correct portfolio and business
+
+Store the following where appropriate:
+- documentId
+- portfolioId
+- businessId
+- docType
+- original file name
+- processed file name
+- drive file id
+- storage path
+- uploaded at
+- processed at
+- confidence score
+- findings
+- red flags
+- recommendations
+- extracted structured data
+- processing status
+- retry count / failure state
+
+UI requirements:
+- clear upload state badges
+- processing state
+- verified state
+- failed state
+- retry option if applicable
+- no dead ends
+
+Deliverables for Phase 3:
+1. inspect current document upload flow
+2. refactor to route through config
+3. add structured persistence for returned payload
+4. update UI state handling
+5. list changed files
+6. identify any missing n8n contract assumptions
+
+==================================================
+PHASE 4 — RISK ENGINE UPGRADE
+==================================================
+
+Goal:
+Make the risk tracker dynamically reorder risk items by actual current severity and blocker status.
+
+Requirements:
+- risk items should not remain static
+- blockers should rise to the top
+- if something like LOI is incomplete, it should show as high priority
+- distinguish immediate blockers from later concerns
+- support a risk score and a blocker flag
+
+Expected logic examples:
+- incomplete LOI = high
+- missing critical financials = high
+- missing lease review = high if lease is relevant at current stage
+- low-priority future items should sort lower
+
+Deliverables for Phase 4:
+1. inspect current risk tracker model and UI
+2. propose or implement scoring logic
+3. implement dynamic sorting
+4. update UI indicators
+5. list changed files
+6. identify further enhancements
+
+==================================================
+PHASE 5 — ADD BUSINESS AS AI INTAKE
+==================================================
+
+Goal:
+“Add Business” must not be a dumb form. It should be an AI-assisted intake and workflow generation experience.
+
+Lightweight input may include:
+- business name
+- stage
+- likely financing type
+- docs received
+- short notes
+
+From that, the system should infer:
+- likely workflow requirements
+- missing document categories
+- readiness gaps
+- next steps
+- risk signals
+
+After business creation, generate:
+- deal summary
+- next steps
+- missing docs
+- risk signals
+- readiness score
+
+If full AI orchestration is not ready, build a rule-based inference engine that can later be swapped for AI.
+
+Deliverables for Phase 5:
+1. inspect current Add Business flow
+2. redesign it as an intake experience
+3. implement inference layer
+4. generate post-create output objects
+5. update UI accordingly
+6. list changed files
+7. identify where true AI should plug in later
+
+==================================================
+PHASE 6 — ONBOARDING GATE
+==================================================
+
+Goal:
+After portfolio creation, the user must be prompted to watch a required founder pep-talk video before deeper system use.
+
+Requirements:
+- support onboarding state
+- track whether video is completed / acknowledged
+- gate deeper system progression if configured
+- build with clean UX, not annoying UX
+- preserve premium mission-control feel
+
+Deliverables for Phase 6:
+1. create onboarding state logic
+2. create gate/check flow
+3. create placeholder video component/state handling
+4. list changed files
+
+==================================================
+PHASE 7 — HARDENING / CLEANUP
+==================================================
+
+After the build work, provide:
+- architecture summary
+- completed vs stubbed items
+- schema/migration summary
+- config/env requirements
+- recommended next implementation priority
+- technical debt list if any
+- UX improvement recommendations that preserve the product identity
+
+==================================================
+UX / DESIGN RULES
+==================================================
+
+The app should feel like:
+- private equity software
+- elite financial mission control
+- a real operating system for acquisition to exit
+
+It should not feel like:
+- a cluttered admin panel
+- an educational tool
+- a spreadsheet wrapper
+
+Rules:
+- no dead ends
+- clear next action on every screen
+- polished empty states
+- elegant status handling
+- psychologically motivating without being cheesy
+- everything should move the user forward
+
+==================================================
+DELIVERY FORMAT
+==================================================
+
+For each phase:
+1. summarize what currently exists
+2. summarize what you will change
+3. implement the code changes
+4. list exact files changed
+5. note any migration/env/config requirements
+6. clearly label completed vs stubbed
+7. recommend next phase
+
+Start with PHASE 1 only.
+Do not skip ahead.
+Build the real backbone first.

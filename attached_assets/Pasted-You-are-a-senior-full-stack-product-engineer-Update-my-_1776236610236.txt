@@ -1,0 +1,300 @@
+You are a senior full-stack product engineer. Update my existing app/dashboard build with the following portfolio management features. Do not simplify. Do not skip edge cases. Build this cleanly, with production-ready UX, state handling, and database logic.
+
+PROJECT CONTEXT
+This app helps a user manage business acquisition workspaces inside a portfolio. Each business/shop currently exists as a workspace on the portfolio home. Each workspace has an Edit button. We now need better lifecycle management for businesses/workspaces, including pipeline handling and soft deletion.
+
+PRIMARY GOAL
+Add:
+1. Delete business from portfolio from the Edit button
+2. Warning prompt before delete
+3. Trash system that holds deleted business workspaces for 10 days before permanent deletion
+4. Pipeline page inside the portfolio
+5. “Move to pipeline” action from the Edit button
+6. Ability for users to keep leads in pipeline instead of only active portfolio
+7. Strong UX so users clearly understand what is happening
+
+IMPORTANT PRODUCT RULES
+- Deleting a business workspace from the app does NOT mean the files/documents are erased from the user’s Drive.
+- The warning must clearly explain:
+  “The business workspace will be removed from your portfolio. Documents associated with this business may still exist in your Drive or external storage.”
+- Deletion should first move the workspace into Trash, not permanently delete it.
+- Trashed business workspaces remain recoverable for 10 days.
+- After 10 days, permanently delete the workspace record and its app-linked structured data.
+- If there are linked document references in the database, decide whether to:
+  a) preserve external file references as detached records, or
+  b) delete only app-owned metadata while leaving external files untouched
+  Use the safer approach and document it in code comments.
+- User must be able to restore a business from Trash within 10 days.
+- User must be able to move a business from active portfolio to pipeline.
+- Pipeline is for leads, opportunities, shops being evaluated, and non-active acquisitions.
+- A business can exist in one lifecycle state at a time:
+  - active_portfolio
+  - pipeline
+  - trashed
+- Do not hard delete immediately from normal user actions.
+
+FEATURES TO BUILD
+
+1. EDIT MENU ACTIONS
+Update the Edit button on each business/workspace card so it opens an action menu or modal with at least:
+- Edit business details
+- Move to pipeline
+- Delete workspace
+
+For businesses already in pipeline:
+- Edit business details
+- Move to active portfolio
+- Delete workspace
+
+For businesses in trash:
+- Restore workspace
+- Delete permanently now
+
+2. DELETE WORKSPACE FLOW
+When user clicks “Delete workspace”:
+- Show a confirmation modal
+- Modal must include:
+  Title: Delete business workspace?
+  Message: This will remove the business from your portfolio and move it to Trash for 10 days. Documents associated with this business may still be found in your Drive or external storage and may not be deleted there.
+- Buttons:
+  - Cancel
+  - Move to Trash
+
+When confirmed:
+- Change status to trashed
+- Save deletedAt timestamp
+- Compute purgeAt = deletedAt + 10 days
+- Remove workspace from active portfolio page
+- Remove workspace from pipeline page
+- Show success toast/banner:
+  “Business moved to Trash. It will be permanently deleted in 10 days unless restored.”
+
+3. TRASH SYSTEM
+Create a Trash area/page in the portfolio section.
+Trash page should display:
+- Business name
+- Original state before trash (active or pipeline)
+- Deleted date
+- Permanent deletion date / countdown remaining
+- Restore button
+- Delete permanently now button
+
+Trash behavior:
+- Items in trash remain recoverable for exactly 10 days
+- After 10 days, they should be permanently deleted automatically
+- Build both:
+  a) frontend countdown / status display
+  b) backend cleanup mechanism
+
+Implement permanent deletion using the safest architecture available in this stack:
+- scheduled job / cron / server function / background task
+- if true background jobs are unavailable, implement fallback cleanup on read/write events plus a scheduled cleanup strategy note
+
+Permanent deletion must remove:
+- app-owned workspace record
+- app-owned notes, tasks, stage history, tags, and workspace metadata tied to that business
+- app-owned document associations if needed
+BUT:
+- DO NOT imply that external Drive files are deleted unless that integration actually supports and performs deletion
+- If external files are not deleted, preserve or detach references safely
+
+4. PIPELINE PAGE
+Add a new “Pipeline” page/tab inside the portfolio area.
+This page should hold business leads and acquisition opportunities the user is not yet treating as active portfolio companies.
+
+Pipeline page should support:
+- list/grid view of lead businesses
+- business name
+- location
+- lead stage
+- status tags
+- owner/contact info if available
+- notes preview
+- date added
+- buttons/actions:
+  - Open workspace
+  - Edit
+  - Move to active portfolio
+  - Delete workspace
+
+Recommended pipeline stages:
+- New Lead
+- Contacted
+- NDA Signed
+- Negotiating
+- LOI Submitted
+- Due Diligence
+- Under Contract
+- On Hold
+- Lost Opportunity
+
+Make stages configurable if possible.
+
+5. MOVE TO PIPELINE
+From the Edit button/menu on an active business, add:
+- “Move to pipeline”
+
+When clicked:
+- Show confirmation modal or inline confirm:
+  “Move this business out of active portfolio and into pipeline?”
+- Preserve all workspace data, notes, tasks, and linked documents
+- Only change lifecycle state from active_portfolio to pipeline
+- Show success message:
+  “Business moved to pipeline.”
+
+6. MOVE TO ACTIVE PORTFOLIO
+From businesses in pipeline, user should be able to move them back into the active portfolio.
+- Preserve all existing data
+- Change state from pipeline to active_portfolio
+- Show success message
+
+7. DATA MODEL CHANGES
+Refactor the business/workspace schema to support lifecycle and trash logic cleanly.
+
+Suggested fields:
+- id
+- name
+- companyType
+- state: 'active_portfolio' | 'pipeline' | 'trashed'
+- pipelineStage
+- previousStateBeforeTrash
+- deletedAt
+- purgeAt
+- restoredAt
+- createdAt
+- updatedAt
+
+Also maintain related entities as needed:
+- workspace_notes
+- workspace_tasks
+- workspace_documents
+- workspace_contacts
+- workspace_activity
+- workspace_tags
+
+Make sure queries exclude trashed items by default unless explicitly requesting trash.
+
+8. FILTERING / NAVIGATION UX
+Portfolio area navigation should now include:
+- Active Portfolio
+- Pipeline
+- Trash
+
+Each page should have:
+- search
+- sort
+- filters appropriate to that page
+
+Suggested filters:
+Active Portfolio:
+- recent activity
+- location
+- tags
+
+Pipeline:
+- stage
+- date added
+- location
+- tags
+
+Trash:
+- days remaining
+- deleted date
+- original state
+
+9. UI / UX QUALITY
+Build this polished, not basic.
+Requirements:
+- clean card layout
+- modern dropdown or action menu for Edit
+- confirmation modals
+- toast notifications
+- empty states for Pipeline and Trash
+- countdown badge for trashed items like “8 days left”
+- warning/destructive styling for delete actions
+- soft informative copy that reduces fear and confusion
+
+Empty state examples:
+Pipeline:
+“No businesses in pipeline yet. Move a lead here to track opportunities before they become active.”
+Trash:
+“No deleted businesses. Items moved to trash stay here for 10 days before permanent deletion.”
+
+10. SAFETY / EDGE CASES
+Handle all edge cases:
+- restoring a trashed item after several days
+- trying to restore after purge date
+- duplicate names
+- moving already-trashed item to pipeline should not be allowed
+- moving active item to active again should no-op safely
+- deleting pipeline item should send to trash
+- deleting active item should send to trash
+- permanent delete should require extra confirmation
+- bulk actions optional if easy, but not required unless architecture supports it cleanly
+
+11. DOCUMENT HANDLING RULE
+This is critical:
+When user deletes or trashes a business workspace, show language that clearly distinguishes:
+- app workspace deletion
+vs
+- external document storage persistence
+
+Use this exact or nearly exact warning language:
+“This removes the business workspace from this app. Documents associated with this business may still remain in your Drive or connected storage unless separately deleted there.”
+
+12. ENGINEERING REQUIREMENTS
+- Update frontend UI
+- Update backend/database schema
+- Add migrations if needed
+- Update API routes / server actions / loaders / services
+- Add type safety across models
+- Add comments where lifecycle logic is important
+- Add defensive guards around destructive actions
+- Make the architecture easy to extend later for:
+  - archive state
+  - bulk restore
+  - bulk move to pipeline
+  - user-configurable trash retention period
+
+13. TESTING
+Add tests for:
+- move active -> pipeline
+- move pipeline -> active
+- delete active -> trash
+- delete pipeline -> trash
+- restore from trash
+- auto purge after 10 days
+- trashed items excluded from normal portfolio queries
+- warning modal content renders correctly
+
+14. DELIVERABLE FORMAT
+I want you to:
+1. Inspect the current project structure first
+2. Determine exactly which files need updating
+3. Make all code changes
+4. Explain what you changed
+5. List any environment variables, migrations, cron jobs, or deployment settings required
+6. Call out any assumptions
+7. Keep all code cohesive with the current stack and patterns already used in the project
+
+DO NOT
+- do not rebuild the whole app from scratch unless absolutely necessary
+- do not remove existing business data
+- do not fake permanent deletion if there is no actual purge logic
+- do not claim documents are deleted from Drive unless that is truly implemented
+
+SUCCESS CRITERIA
+The user can now:
+- delete a business from the portfolio through Edit
+- see a clear warning before deletion
+- recover deleted businesses from Trash within 10 days
+- rely on automatic permanent deletion after 10 days
+- move businesses between Active Portfolio and Pipeline
+- keep leads organized separately from active businesses
+- understand that external documents may still exist in Drive even after the app workspace is deleted
+
+After coding, give me:
+- a concise summary
+- file-by-file changes
+- schema changes
+- anything I need to click/configure manually in Replit or deployment

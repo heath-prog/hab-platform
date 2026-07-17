@@ -1,0 +1,409 @@
+Upgrade the “Add Business to Portfolio” experience from a basic form into an intelligent intake and workflow-orchestration system.
+
+This should no longer behave like a simple record entry page.
+
+It should behave like an AI-assisted business intake wizard that:
+1. captures a more complete business/deal profile
+2. infers the likely workflow path
+3. adapts buyer and seller workflows automatically
+4. identifies missing next steps
+5. guides the user forward like an acquisition assistant
+
+==================================================
+PRIMARY OBJECTIVE
+==================================================
+
+When a user adds a business to the portfolio, the app should gather enough structured context to intelligently configure:
+- deal stage
+- acquisition workflow
+- buyer workflow
+- seller workflow
+- financing path
+- document requests
+- risk flags
+- next-step recommendations
+- missing-step prompts
+
+The result should feel like:
+“The app understands this deal and is helping me move it forward.”
+
+==================================================
+RENAME / REFRAME THE PAGE
+==================================================
+
+Replace “Add Business to Portfolio” with a more premium and intelligent title such as:
+
+- Add New Opportunity
+- Add Business to Pipeline
+- Create Business Workspace
+- New Acquisition Intake
+
+Subtitle example:
+“Capture the key facts and let the platform configure the right workflow, documents, and next steps.”
+
+==================================================
+MAKE THE INTAKE MORE COMPREHENSIVE
+==================================================
+
+Expand the intake into sections instead of one flat form.
+
+Suggested sections:
+
+1. BUSINESS PROFILE
+- Business Name
+- Industry
+- Business Type
+- DBA / Brand Name
+- Legal Entity Name
+- Website
+- Address / City / State
+- Number of Locations
+- Years in Business
+- Description
+
+2. DEAL PROFILE
+- Current Stage
+- Acquisition Type:
+  - Undecided
+  - Stock Purchase
+  - Asset Purchase
+- Asking Price / Deal Price
+- Estimated Down Payment
+- Target Close Date
+- Is SBA financing likely?
+- Is seller financing part of the structure?
+- Is lease assignment or new lease expected?
+- Is landlord approval required?
+- Is this a brokered deal?
+- Is exclusivity in place?
+- Current step / notes
+
+3. PEOPLE
+- Seller Name
+- Seller Entity
+- Buyer / Operator
+- Buyer Entity
+- Broker Name
+- Attorney
+- CPA
+- Landlord Contact
+- Lender / SBA Contact
+
+4. DOCUMENT STATUS SNAPSHOT
+- Has seller provided financials?
+- Have tax returns been received?
+- Have P&Ls been received?
+- Have bank statements been received?
+- Has lease been received?
+- Have payroll docs been received?
+- Has debt schedule been received?
+- Has equipment list been received?
+- Have licenses / permits been received?
+
+5. FINANCING / CAPITAL PATH
+- Cash purchase
+- Seller note
+- SBA
+- Conventional loan
+- Investor equity
+- Undecided
+- Working capital needed?
+- Estimated post-close cash need
+
+6. OPERATOR READINESS
+- Will buyer operate directly?
+- Is a manager in place?
+- Is Day 1 operator known?
+- Will current staff remain?
+- Is post-close financial system required immediately?
+- Is this intended to become part of a multi-shop rollup?
+
+==================================================
+INTELLIGENT WORKFLOW ADAPTATION
+==================================================
+
+After business intake is submitted, the app should infer and configure workflow logic automatically.
+
+The system should create:
+- lifecycle stage
+- workflow path
+- financing path
+- buyer action queue
+- seller request queue
+- document checklist
+- missing-item prompts
+- risk alerts
+- recommended next step
+
+Examples of workflow adaptation:
+
+If stage = Lead:
+- create lead workspace
+- recommend NDA / initial financial request if not yet received
+- keep seller portal minimal
+- show “advance to active deal” criteria
+
+If seller has already provided some financials:
+- mark preliminary diligence started
+- prompt user to upload received financials
+- open financial review workflow early
+- suggest which missing financial documents are still needed
+
+If SBA financing = yes:
+- activate SBA readiness track
+- create checklist for lender package
+- do not show SBA submission ready until required documents are complete
+- surface lender-focused missing items
+
+If acquisition type = Asset Purchase:
+- activate New Entity Setup path
+- activate transfer/assignment tasks
+- deactivate stock-specific tasks
+
+If acquisition type = Stock Purchase:
+- activate corporate record review
+- activate liability / tax / entity continuity review
+
+If stage = Operating:
+- route workspace default home to Financial Management dashboard
+
+==================================================
+AI ASSISTANT BEHAVIOR
+==================================================
+
+Add an “AI Deal Assistant” panel to the intake confirmation and business workspace overview.
+
+This assistant should use intake data to generate:
+
+1. Deal Summary
+Example:
+“Prestige Auto Works is currently in Lead stage, likely SBA-financed, with preliminary financials received but upload and review still pending.”
+
+2. Recommended Next Steps
+Example:
+- Upload seller-provided financials
+- Send missing document request
+- Start SBA lender checklist
+- Clarify transaction structure
+- Confirm lease and landlord path
+
+3. Missing Critical Items
+Example:
+- Tax returns not received
+- Lease not received
+- Bank statements not received
+- Debt schedule not received
+
+4. Workflow Suggestions
+Example:
+- Because SBA is likely, activate lender-readiness workflow
+- Because financials were partially received, start diligence before LOI refinement
+- Because this is still a Lead, seller portal should stay document-light until deal advances
+
+5. Readiness Signals
+Example:
+- Diligence readiness: low
+- Financing readiness: low
+- Seller response readiness: medium
+- Close readiness: not started
+
+This should feel like an in-app operating assistant, not just static text.
+
+==================================================
+USE THE USER’S EXAMPLE AS A TEST CASE
+==================================================
+
+Use this exact example as a seed test case for the new intake logic:
+
+Business Name: Prestige Auto Works
+Industry: Automotive Repair
+Stage: Lead
+Seller Name: Andre Kamel
+Buyer / Operator: Heath Blake
+Entity Name: Prestige Autoworks LLC
+Deal Price: 1800000
+Target Close Date: 2026-09-15
+Description:
+European auto repair shop in Elk Grove. SBA needed to purchase business. Current step: seller provided some financials. Need to upload before submitting SBA docs and obtaining loan.
+
+The app should infer from this example:
+- likely financing path = SBA
+- deal has moved beyond cold lead because financials have been partially received
+- financial upload is an immediate blocker
+- lender workflow should be staged but not yet “ready”
+- seller document request workflow should prioritize financial completeness
+- buyer workflow should prioritize upload, review, and lender prep
+
+==================================================
+NEW REQUIRED FIELDS / DATA MODEL
+==================================================
+
+Add fields to the Business / Deal model such as:
+
+Business:
+- businessId
+- portfolioId
+- businessName
+- industry
+- businessType
+- legalEntityName
+- location
+- description
+- sellerName
+- buyerOperator
+- lifecycleStage
+- acquisitionType
+- rollupIntent
+- createdAt
+- updatedAt
+
+Deal:
+- dealId
+- businessId
+- dealPrice
+- targetCloseDate
+- financingType
+- sellerFinancingExpected
+- sbaRequired
+- exclusivityStatus
+- landlordApprovalRequired
+- currentStepNote
+- preliminaryFinancialsReceived
+- documentCompletenessScore
+- readinessScore
+- createdAt
+- updatedAt
+
+==================================================
+INTAKE UX REQUIREMENTS
+==================================================
+
+The intake should feel:
+- premium
+- guided
+- intelligent
+- not overwhelming
+- fast but comprehensive
+
+Use:
+- multi-step wizard or sectioned form
+- progress indicator
+- autosave
+- inline smart suggestions
+- helper text
+- smart defaults
+- expandable advanced fields
+
+Do NOT make the first screen feel bloated.
+Do make it feel powerful.
+
+Suggested UX flow:
+Step 1: Business Basics
+Step 2: Deal Structure
+Step 3: People & Contacts
+Step 4: Documents & Financial Status
+Step 5: Financing & Operating Path
+Step 6: AI Summary + Confirm
+
+==================================================
+POST-SUBMIT BEHAVIOR
+==================================================
+
+After intake is submitted:
+
+1. Create the business workspace
+2. Generate the initial adapted workflow state
+3. Create the buyer action queue
+4. Create the seller request queue
+5. Generate AI Deal Assistant summary
+6. Show a “Next Actions” launch screen
+
+Example launch screen sections:
+- Deal Summary
+- Top 3 Next Actions
+- Missing Documents
+- Recommended Workflow Track
+- Risks to Watch
+- Open Business Workspace button
+
+==================================================
+BUYER / SELLER WORKFLOW ADAPTATION
+==================================================
+
+Buyer workflow should adapt based on:
+- stage
+- financing type
+- acquisition type
+- documents received
+- close urgency
+- post-close operating intent
+
+Seller workflow should adapt based on:
+- current stage
+- what docs are missing
+- whether seller portal should be opened yet
+- whether only minimal requests should be shown
+- whether financials or lease docs are the next request
+
+Example:
+For Prestige Auto Works:
+Buyer workflow:
+- upload received financials
+- review basic financial package
+- open SBA prep checklist
+- identify missing lender documents
+
+Seller workflow:
+- request remaining financials
+- request lease package
+- request tax returns
+- request debt schedule
+
+==================================================
+READINESS / SCORING LOGIC
+==================================================
+
+Generate lightweight readiness scores from intake:
+- Document readiness
+- Financing readiness
+- Diligence readiness
+- Close readiness
+
+These can be estimated initially and improved as data is added.
+
+Example:
+Prestige Auto Works might initially show:
+- Document readiness: 20%
+- Financing readiness: 15%
+- Diligence readiness: 25%
+- Close readiness: 5%
+
+==================================================
+DELIVERABLES
+==================================================
+
+Build:
+1. upgraded intake wizard
+2. expanded data model
+3. intake-to-workflow inference logic
+4. AI Deal Assistant panel
+5. buyer workflow auto-generation
+6. seller workflow auto-generation
+7. readiness score estimation
+8. launch summary screen after business creation
+9. use Prestige Auto Works as seeded demo/test logic
+
+==================================================
+EXECUTION RULES
+==================================================
+
+- do not treat business creation as simple data entry
+- treat it as workflow initialization
+- use intake data to reduce manual setup later
+- make the app feel like it is helping the user think
+- preserve premium executive UX
+- design for multiple businesses and multiple simultaneous acquisitions
+
+FINAL INSTRUCTION
+
+Build the “Add Business” experience as an intelligent acquisition intake system that sets up the right workflow automatically and acts like an AI assistant helping the owner move each deal to the next step.

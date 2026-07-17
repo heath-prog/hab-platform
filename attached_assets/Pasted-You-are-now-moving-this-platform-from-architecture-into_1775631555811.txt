@@ -1,0 +1,603 @@
+You are now moving this platform from architecture into live workflow execution.
+
+The platform already has:
+- Portfolio Command Center
+- multi-business workspaces
+- post-close activation logic
+- Financial Management section
+- Reports section
+- document model with drive/extracted-data fields
+
+Now build the live integration layer so the app becomes operational.
+
+==================================================
+PRIMARY OBJECTIVE
+==================================================
+
+Build the first production-minded integration layer connecting this app to n8n, Google Drive, Google Sheets, and future financial sources.
+
+This app must support:
+- multiple leads
+- multiple deals
+- multiple acquisitions in progress
+- multiple operating shops
+- business-scoped documents
+- extracted data reuse
+- source traceability
+- post-close financial operations
+- premium UX throughout
+
+The app must not behave like a mock dashboard.
+It must behave like a real command center.
+
+==================================================
+CORE ARCHITECTURE RULE
+==================================================
+
+Every major object in the app must be business-scoped.
+
+Use these core entities consistently:
+
+1. Portfolio
+2. Business
+3. Deal
+4. Entity
+5. Document
+6. VerificationReport
+7. ExtractedRecord
+8. WorkflowStatus
+9. FinancialTransaction
+10. ExpenseDocument
+11. ReconciliationResult
+12. ReportDataset
+13. IntegrationConnection
+
+==================================================
+CANONICAL FIELD SCHEMA
+==================================================
+
+Use these shared IDs and fields across the app and all integrations:
+
+Portfolio:
+- portfolioId
+- portfolioName
+- ownerUserId
+
+Business:
+- businessId
+- portfolioId
+- businessName
+- legalEntityName
+- lifecycleStage
+- acquisitionType
+- industryType
+- location
+- sellerName
+- targetPrice
+- targetCloseDate
+- actualCloseDate
+- createdAt
+- updatedAt
+
+Deal:
+- dealId
+- portfolioId
+- businessId
+- dealStage
+- transactionStructure
+- loiDate
+- escrowStartDate
+- closeTargetDate
+- closeActualDate
+- readinessScore
+- createdAt
+- updatedAt
+
+Document:
+- documentId
+- portfolioId
+- businessId
+- dealId
+- documentType
+- workflowStage
+- acquisitionType
+- businessName
+- uploadedBy
+- uploadDate
+- driveFileId
+- driveFileName
+- driveViewLink
+- mimeType
+- verificationStatus
+- confidenceScore
+- extractedDataSnapshot
+- replacementVersion
+- createdAt
+- updatedAt
+
+VerificationReport:
+- verificationReportId
+- portfolioId
+- businessId
+- dealId
+- documentId
+- documentType
+- agentName
+- confidenceScore
+- summary
+- findings
+- redFlags
+- recommendations
+- advisorNotes
+- extractedData
+- createdAt
+
+WorkflowStatus:
+- workflowStatusId
+- portfolioId
+- businessId
+- dealId
+- workflowStage
+- statusType
+- statusValue
+- notes
+- sourceDocumentId
+- updatedBy
+- updatedAt
+
+FinancialTransaction:
+- transactionId
+- portfolioId
+- businessId
+- dealId
+- shopId
+- sourceType
+- period
+- transactionDate
+- category
+- subCategory
+- amount
+- reference
+- description
+- sourceDocumentId
+- sourceSystem
+- createdAt
+
+ExpenseDocument:
+- expenseDocumentId
+- portfolioId
+- businessId
+- dealId
+- shopId
+- documentId
+- vendorName
+- documentType
+- invoiceNumber
+- statementDate
+- dueDate
+- amount
+- balance
+- statusHint
+- expenseCategory
+- subCategory
+- confidenceScore
+- driveFileId
+- driveFileName
+- driveViewLink
+- createdAt
+
+ReconciliationResult:
+- reconciliationId
+- portfolioId
+- businessId
+- documentId
+- vendorName
+- amount
+- matchedReference
+- matchedAmount
+- matchedDate
+- reconciliationStatus
+- confidenceScore
+- notes
+- createdAt
+
+IntegrationConnection:
+- connectionId
+- portfolioId
+- businessId
+- sourceType
+- connectionStatus
+- lastSyncAt
+- lastSyncResult
+- createdAt
+- updatedAt
+
+==================================================
+LIVE INTEGRATION PRIORITIES
+==================================================
+
+Build these in order:
+
+1. Document upload to n8n
+2. Document verification result ingestion
+3. Original PDF retrieval
+4. Workflow automation from extracted data
+5. Financial source connection panel behavior
+6. Financial data ingestion
+7. Expense/reconciliation center
+8. Live reports from source-backed data
+
+==================================================
+1. DOCUMENT UPLOAD INTEGRATION
+==================================================
+
+Implement a real document upload action from the app to n8n.
+
+When a document is uploaded from any business workspace, send a multipart/form-data request to the n8n document intake webhook with these exact fields:
+
+- file
+- portfolioId
+- businessId
+- dealId
+- documentId
+- documentType
+- workflowStage
+- acquisitionType
+- businessName
+- dealName
+- buyerName
+- sellerName
+- uploadedBy
+- uploadDate
+
+UX requirements:
+- show upload progress
+- show processing state
+- show success/failure toast
+- add optimistic UI state carefully
+- once response returns, update the correct business document record
+
+After success, persist:
+- driveFileId
+- driveFileName
+- driveViewLink
+- verificationStatus
+- confidenceScore
+- summary
+- findings
+- redFlags
+- recommendations
+- advisorNotes
+- extractedDataSnapshot
+
+Document actions must include:
+- View Original PDF
+- View Verification Report
+- View Extracted Data
+- Re-upload / Replace Version
+
+==================================================
+2. DOCUMENT RESPONSE INGESTION
+==================================================
+
+Create a consistent client-side and server-side handler for document intake response.
+
+Expected response structure:
+
+{
+  "portfolioId": "port_001",
+  "businessId": "biz_001",
+  "dealId": "deal_001",
+  "documentId": "d1",
+  "documentType": "3 Years Tax Returns",
+  "workflowStage": "Due Diligence",
+  "driveFileId": "abc123",
+  "driveFileName": "True Blue Auto Care - Tax Returns - d1 - 2026-04-07.pdf",
+  "driveViewLink": "https://...",
+  "verificationStatus": "completed",
+  "agentName": "Tax Return Analyst",
+  "confidenceScore": 82,
+  "summary": "Three years of tax returns reviewed...",
+  "findings": [],
+  "redFlags": [],
+  "recommendations": [],
+  "advisorNotes": "Overall appears consistent...",
+  "extractedData": {}
+}
+
+Persist it into the business-scoped document model and verification report model.
+
+==================================================
+3. ORIGINAL PDF RETRIEVAL
+==================================================
+
+Implement "View Original PDF" and "Download Original" actions.
+
+When clicked, the app should call the n8n document retrieval webhook with:
+
+{
+  "businessId": "...",
+  "dealId": "...",
+  "documentId": "..."
+}
+
+Support:
+- open in new tab if direct PDF returned
+- fallback to Drive view link if JSON response provides link
+- elegant error handling if file missing
+
+This must work from:
+- Document Center
+- Business Workspace
+- Verification Report Detail
+- Reports source trace drill-down
+
+==================================================
+4. WORKFLOW AUTOMATION FROM EXTRACTED DATA
+==================================================
+
+Build a workflow intelligence layer in the app.
+
+When verified documents return extracted data:
+- update matching workflow sections automatically when confidence is above threshold
+- trigger manual review when confidence is low
+- show dependencies clearly
+
+Examples:
+- verified lease agreement updates lease tracker
+- verified BAR/license docs update compliance tracker
+- verified tax returns update diligence metrics
+- verified payroll docs update employee readiness items
+- verified entity docs update asset-purchase entity setup status
+
+Add threshold logic:
+- >= 85 = auto-eligible for workflow assist
+- 70–84 = show review recommended
+- < 70 = manual review required
+
+Do not fully hide human review.
+Do make the app feel smart.
+
+==================================================
+5. FINANCIAL SOURCE CONNECTION PANEL
+==================================================
+
+Turn the Financial Management source panel into a real connection status module.
+
+Sources:
+- Tekmetric
+- QuickBooks
+- Bank Feed
+- N8n
+- Manual Upload
+
+Each source card should show:
+- sourceType
+- connectionStatus
+- lastSyncAt
+- lastSyncResult
+- dataCoverage summary
+- action button
+
+Connection states:
+- not_connected
+- pending
+- connected
+- sync_error
+- manual_only
+
+Design for real use, not placeholders.
+
+==================================================
+6. FINANCIAL DATA INGESTION LAYER
+==================================================
+
+Build business-scoped financial ingestion support.
+
+App should accept or request normalized financial data records from n8n with this schema:
+
+{
+  "portfolioId": "port_001",
+  "businessId": "biz_001",
+  "dealId": "deal_001",
+  "shopId": "shop_001",
+  "sourceType": "quickbooks",
+  "period": "2026-04",
+  "records": [
+    {
+      "transactionId": "txn_001",
+      "transactionDate": "2026-04-01",
+      "category": "Revenue",
+      "subCategory": "Labor Revenue",
+      "amount": 4200,
+      "reference": "QB-12345",
+      "description": "Daily sales import",
+      "sourceDocumentId": "",
+      "sourceSystem": "QuickBooks"
+    }
+  ]
+}
+
+Store and render these records per business.
+
+Use them to power:
+- KPI cards
+- P&L table
+- source traceability
+- report generation
+- reconciliation center
+
+==================================================
+7. RECONCILIATION CENTER
+==================================================
+
+Build a premium reconciliation interface inside Financial Management.
+
+Sections:
+- Uploaded expense docs
+- Matched transactions
+- Likely paid
+- Unmatched
+- Review needed
+
+Each item should show:
+- vendorName
+- amount
+- statementDate
+- dueDate
+- statusHint
+- reconciliationStatus
+- confidenceScore
+- matchedReference
+- source file link
+
+Actions:
+- View Original
+- View Extracted Data
+- Mark Reviewed
+- Approve Mapping
+- Escalate
+
+Make it feel like high-end finance ops, not bookkeeping software.
+
+==================================================
+8. REPORTS FROM LIVE DATA
+==================================================
+
+Wire the Reports section to real business-scoped data.
+
+Report inputs:
+- Documents
+- Verification reports
+- Workflow status
+- Financial transactions
+- Expense documents
+- Reconciliation results
+
+Every report should be source-traceable.
+
+A report metric should support:
+metric → detail panel → source rows → original document
+
+Report types to activate first:
+- Lender Financial Summary
+- Investor Update
+- Normalized EBITDA
+- Exit Readiness
+- Acquisition Readiness
+- Monthly Management Report
+
+==================================================
+9. PORTFOLIO-WIDE ROLLUPS
+==================================================
+
+Build portfolio rollups using business-scoped records.
+
+Portfolio Command Center should show:
+- total leads
+- active deals
+- businesses in diligence
+- operating shops
+- documents pending review
+- critical alerts
+- revenue TTM by business when available
+- EBITDA TTM by business when available
+
+Support:
+- card view
+- list view
+- stage view
+
+==================================================
+10. API / INTEGRATION ABSTRACTION
+==================================================
+
+Create a clean integration service layer in the app.
+
+Suggested services:
+- documentService
+- workflowService
+- financialService
+- reportingService
+- portfolioService
+- integrationService
+
+Keep request/response handling centralized.
+Do not scatter webhook logic throughout UI components.
+
+==================================================
+11. UX REQUIREMENTS
+==================================================
+
+Keep the product:
+- premium
+- executive
+- operational
+- calm
+- data-rich but not cluttered
+
+Do not let the integration layer degrade the UX.
+
+Use:
+- progress states
+- sync badges
+- confidence badges
+- source tags
+- activity timeline
+- premium empty states
+- actionable error states
+
+The user should feel:
+- uploads become intelligence
+- intelligence becomes execution
+- execution becomes value creation
+
+==================================================
+12. ERROR / RECOVERY STATES
+==================================================
+
+Handle:
+- n8n unavailable
+- Drive upload failure
+- partial analysis success
+- duplicate documents
+- missing source file
+- malformed extracted data
+- sync timeouts
+
+Show clear, premium recovery UX:
+- retry
+- mark for manual review
+- open source
+- replace file
+- contact admin note if needed
+
+==================================================
+13. DELIVERABLES
+==================================================
+
+Build:
+1. live document upload integration
+2. live document response persistence
+3. original PDF retrieval flow
+4. extracted-data-driven workflow automation
+5. source connection status module
+6. financial data ingestion support
+7. reconciliation center
+8. source-traceable reporting activation
+9. portfolio-wide rollups
+10. centralized service layer for integrations
+
+==================================================
+FINAL INSTRUCTION
+==================================================
+
+Build this phase as the functional spine of the platform.
+
+The result should feel like a real ownership operating system:
+documents flow in,
+AI interprets them,
+workflow steps update,
+financial data accumulates,
+reports become credible,
+and the user gains control across multiple businesses.

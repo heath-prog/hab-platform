@@ -1,0 +1,273 @@
+Got it—this is where we turn you into a **machine**.
+I’m going to build you a **Document Completion Dashboard + Execution System** you can literally run this deal off of.
+
+This is designed so you can:
+
+* Track everything
+* Execute fast
+* Not miss anything
+* Delegate if needed
+* Move like a professional acquisition team
+
+---
+
+# 🔥 TRUE BLUE ACQUISITION DASHBOARD
+
+*(Copy into Google Docs / Notion / Sheets)*
+
+---
+
+# 📊 SECTION 1 — MASTER STATUS BOARD
+
+## Deal Overview
+
+* Target: True Blue Auto Care Inc
+* Seller: Saj Zoghet
+* Purchase Price: $300,000
+* Escrow Start: May 16, 2026
+* Target Close: July 16, 2026
+
+---
+
+## 📌 Progress Tracker
+
+| Category            | Status | % Complete | Notes |
+| ------------------- | ------ | ---------- | ----- |
+| LOI Signed          | ☐      | 0%         |       |
+| Due Diligence       | ☐      | 0%         |       |
+| Lease Secured       | ☐      | 0%         |       |
+| Financing Finalized | ☐      | 0%         |       |
+| Legal Docs          | ☐      | 0%         |       |
+| Licenses (BAR etc.) | ☐      | 0%         |       |
+| Insurance           | ☐      | 0%         |       |
+| Closing Ready       | ☐      | 0%         |       |
+
+---
+
+# 📁 SECTION 2 — DOCUMENT REQUEST CHECKLIST
+
+## 🔴 CRITICAL DOCUMENTS (SEND DAY 1)
+
+| Document                     | Received | Verified | Notes |
+| ---------------------------- | -------- | -------- | ----- |
+| 3 Years Tax Returns          | ☐        | ☐        |       |
+| P&L Statements               | ☐        | ☐        |       |
+| Balance Sheets               | ☐        | ☐        |       |
+| Bank Statements (12 mo)      | ☐        | ☐        |       |
+| Debt Schedule                | ☐        | ☐        |       |
+| Lease Agreement              | ☐        | ☐        |       |
+| BAR License                  | ☐        | ☐        |       |
+| Smog License (if applicable) | ☐        | ☐        |       |
+| Payroll Reports              | ☐        | ☐        |       |
+| Employee List                | ☐        | ☐        |       |
+| Vendor List                  | ☐        | ☐        |       |
+| Inventory List               | ☐        | ☐        |       |
+| Equipment List               | ☐        | ☐        |       |
+| Vehicle Title (Jeep)         | ☐        | ☐        |       |
+| Tekmetric Export             | ☐        | ☐        |       |
+| Google / Website Access      | ☐        | ☐        |       |
+
+---
+
+# 📨 SECTION 3 — TEMPLATE: DOCUMENT REQUEST EMAIL
+
+Hi Saj,
+
+Thank you again for the opportunity to move forward on the acquisition of True Blue Auto Care.
+
+As part of our due diligence process, please provide the following documents at your earliest convenience:
+
+• Last 3 years of business tax returns
+• Last 3 years P&L and balance sheets
+• Last 12 months of bank statements
+• Current lease agreement and landlord contact
+• BAR registration and any smog/STAR licenses
+• Payroll reports and employee roster
+• Accounts payable and receivable aging reports
+• Debt schedule (loans, equipment financing, etc.)
+• Equipment and inventory list
+• Title for company-owned vehicles (including Jeep)
+• Vendor list
+• Tekmetric (or shop management) export/report
+• Access to digital assets (website, Google profile, etc.)
+• Any outstanding legal, tax, or compliance issues
+
+Please upload these to a shared folder or send directly.
+
+Looking forward to working through this together and keeping momentum.
+
+Best regards,
+Heath Blake
+CEO / President
+HAB Enterprises 3 LLC
+
+---
+
+# 📞 SECTION 4 — CALL TRACKER (EXECUTION LIST)
+
+## 🔥 MUST CALL (WITH CHECKBOXES)
+
+| Contact          | Purpose              | Phone        | Status |
+| ---------------- | -------------------- | ------------ | ------ |
+| BAR              | License transfer     | 855-735-0465 | ☐      |
+| CDTFA            | Tax clearance        | 800-400-7115 | ☐      |
+| EDD              | Payroll transfer     | 888-745-3886 | ☐      |
+| Insurance Broker | Bind coverage        | TBD          | ☐      |
+| Landlord         | Lease negotiation    | TBD          | ☐      |
+| CPA              | Financial validation | TBD          | ☐      |
+| Attorney         | Deal structure       | TBD          | ☐      |
+
+---
+
+# 📊 SECTION 5 — FINANCIAL VALIDATION TRACKER
+
+## KPIs (Fill once data received)
+
+| Metric          | Value | Target | Status |
+| --------------- | ----- | ------ | ------ |
+| Monthly Revenue |       | 80k+   | ☐      |
+| Car Count       |       |        | ☐      |
+| ARO             |       | $500+  | ☐      |
+| Labor GP %      |       | 60%+   | ☐      |
+| Parts GP %      |       | 50%+   | ☐      |
+| Net Profit      |       |        | ☐      |
+
+---
+
+## 💡 DEAL TEST (IMPORTANT)
+
+✔ Can the business support:
+
+* $2,250/month seller note
+* Payroll
+* Rent ($8K)
+* Parts
+* Your income
+
+👉 If NOT → renegotiate price or terms
+
+---
+
+# 📍 SECTION 6 — LEASE TRACKER
+
+| Item                          | Status | Notes |
+| ----------------------------- | ------ | ----- |
+| Lease Received                | ☐      |       |
+| Landlord Contacted            | ☐      |       |
+| Term Length                   | ☐      |       |
+| Assignment Allowed            | ☐      |       |
+| Rent Confirmed                | ☐      |       |
+| CAM/NNN                       | ☐      |       |
+| Repair Responsibilities       | ☐      |       |
+| ROFR (Right of First Refusal) | ☐      |       |
+
+---
+
+# 📋 SECTION 7 — LICENSE & COMPLIANCE
+
+| Item                       | Status | Notes |
+| -------------------------- | ------ | ----- |
+| BAR Transfer Plan          | ☐      |       |
+| Smog License               | ☐      |       |
+| Seller Compliance Verified | ☐      |       |
+| No Open Violations         | ☐      |       |
+
+---
+
+# 🧠 SECTION 8 — RISK TRACKER (CRITICAL)
+
+| Risk                   | Severity | Action                   |
+| ---------------------- | -------- | ------------------------ |
+| Hidden Debt            | High     | Verify UCC + financials  |
+| Lease Issues           | High     | Secure landlord approval |
+| License Transfer Delay | High     | Call BAR early           |
+| Overstated Revenue     | High     | Validate bank deposits   |
+| Employee Walkout       | Medium   | Communication plan       |
+
+---
+
+# 🚀 SECTION 9 — DAY 1 TAKEOVER CHECKLIST
+
+## CONTROL ITEMS
+
+| Item                   | Status |
+| ---------------------- | ------ |
+| Bank Access            | ☐      |
+| Payroll Access         | ☐      |
+| Tekmetric Admin        | ☐      |
+| Google Profile         | ☐      |
+| Website Access         | ☐      |
+| Phone Number Ownership | ☐      |
+| Vendor Accounts        | ☐      |
+| Keys / Alarm Codes     | ☐      |
+
+---
+
+# 📅 SECTION 10 — 30 DAY EXECUTION PLAN
+
+## Week 1 — Stabilize
+
+☐ Meet team
+☐ Review operations
+☐ Secure systems
+
+## Week 2 — Diagnose
+
+☐ Pull KPIs
+☐ Identify leaks
+☐ Evaluate staff
+
+## Week 3 — Optimize
+
+☐ Fix pricing
+☐ Improve inspections
+☐ Implement follow-ups
+
+## Week 4 — Grow
+
+☐ Reactivate customers
+☐ Push maintenance
+☐ Increase ARO
+
+---
+
+# 🔥 HOW TO USE THIS
+
+1. Copy into:
+
+   * Google Sheets (best)
+   * Notion (cleanest)
+   * Or print
+
+2. Update DAILY
+
+3. Treat like a scoreboard:
+
+   * Green = done
+   * Red = risk
+
+---
+
+# 💡 PRO TIP (THIS IS BIG)
+
+This dashboard turns you from:
+👉 “Buying a shop”
+
+Into:
+👉 “Running an acquisition operation”
+
+---
+
+# 🚀 NEXT LEVEL (IF YOU WANT)
+
+I can build you:
+
+* A **Google Sheet version (fully automated with % tracking)**
+* A **Due Diligence scoring model (tells you if deal is good or bad)**
+* A **Financial projection showing your ROI + timeline to profit**
+* A **First 90-day RNSP implementation plan for this shop**
+
+Just say:
+👉 “Build me the live sheet”
+
+and I’ll take this to the next level.

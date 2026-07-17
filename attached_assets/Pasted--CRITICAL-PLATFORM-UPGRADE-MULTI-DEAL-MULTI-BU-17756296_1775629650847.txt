@@ -1,0 +1,383 @@
+==================================================
+CRITICAL PLATFORM UPGRADE: MULTI-DEAL / MULTI-BUSINESS ARCHITECTURE
+==================================================
+
+This platform must NOT be designed around a single acquisition.
+
+The app must support:
+- multiple leads
+- multiple businesses under review
+- multiple active acquisitions at the same time
+- multiple closed shops under management
+- future portfolio / roll-up ownership across multiple locations and entities
+
+The user must be able to manage an entire acquisition pipeline and operating portfolio from one account.
+
+Design the app as a portfolio-aware ownership operating system.
+
+==================================================
+PORTFOLIO STRUCTURE REQUIREMENT
+==================================================
+
+The product must distinguish between:
+
+1. LEADS
+Potential businesses not yet in diligence
+
+2. DEALS
+Businesses in active conversation / NDA / LOI / diligence / close workflows
+
+3. ACQUIRED BUSINESSES
+Closed shops that have moved into active operation and financial management
+
+4. ARCHIVED / EXITED BUSINESSES
+Disposed, closed, or inactive businesses retained for historical record
+
+Each business should have its own dedicated workspace with:
+- business name
+- entity name
+- deal stage
+- acquisition type
+- assigned team members
+- documents
+- AI verification results
+- financials
+- transition tasks
+- reporting data
+- historical timeline
+
+==================================================
+NEW PRIMARY NAVIGATION MODEL
+==================================================
+
+The app must include a top-level portfolio navigation structure such as:
+
+- Portfolio Home
+- Leads
+- Active Deals
+- Operating Shops
+- Reports & Analytics
+- Documents
+- Resources & Filings
+- Admin / Permissions
+
+Portfolio Home should act like a command center for all businesses.
+
+==================================================
+PORTFOLIO HOME DASHBOARD
+==================================================
+
+Create a new master dashboard called:
+
+“Portfolio Command Center”
+
+This should show:
+- total leads
+- active acquisitions
+- businesses in diligence
+- businesses awaiting close
+- recently closed shops
+- operating shops
+- critical blockers across all deals
+- document verification alerts
+- compliance alerts
+- financial alerts
+- next best actions across the portfolio
+
+Include views such as:
+- card view
+- list view
+- kanban by stage
+- calendar/timeline
+- risk-priority view
+
+The user should feel:
+“I can see my entire acquisition and ownership pipeline in one place.”
+
+==================================================
+BUSINESS WORKSPACE REQUIREMENT
+==================================================
+
+Every lead / deal / business must have its own dedicated workspace.
+
+Each workspace should include:
+- Overview
+- Deal Stage
+- Transaction Structure
+- Documents
+- Verification Reports
+- Financials
+- Risks
+- Lease / Licensing / Compliance
+- Day 1 / 30-Day Transition
+- Reporting
+- Notes / Activity Timeline
+
+All data must be scoped to that specific business unless explicitly shown in a consolidated portfolio view.
+
+==================================================
+DOCUMENT PIPELINE ARCHITECTURE
+==================================================
+
+The document system must be multi-business aware.
+
+When a document is uploaded in the app, it must automatically be associated with:
+- portfolio owner
+- business / deal
+- document type
+- document ID
+- workflow stage
+- upload timestamp
+- uploader
+- transaction path (stock / asset / both)
+- original file source
+
+Documents uploaded through the app are sent to an n8n workflow.
+
+The workflow architecture must assume the following behavior:
+
+1. ORIGINAL DOCUMENT STORAGE
+- The uploaded file is stored in Google Drive
+- It must use standardized naming conventions
+- It must be organized for easy lookup by business and document type
+- The original PDF/file must always remain retrievable from the app
+
+2. STRUCTURED DATA EXTRACTION
+- The n8n workflow extracts structured information from the document
+- The extracted data is written into a data table, using Google Sheets as the practical v1 datastore
+- The structured data is then available for accurate downstream workflow execution, reporting, analytics, and AI interpretation
+
+3. VERIFICATION / ANALYSIS RETURN
+- The workflow returns:
+  - confidence score
+  - summary
+  - findings
+  - red flags
+  - recommendations
+  - advisor notes
+  - extracted data payload
+  - drive file reference
+  - document status indicators
+
+4. ORIGINAL DOCUMENT RETRIEVAL
+- The app must always allow the original source document to be retrieved from Google Drive as a PDF/file
+- Users must be able to open or download the original document directly from the business workspace
+- The structured data must never replace access to the source file
+
+==================================================
+GOOGLE DRIVE ORGANIZATION REQUIREMENT
+==================================================
+
+Design the file architecture so uploaded documents are stored in Google Drive in a clean and scalable way.
+
+Recommended folder pattern:
+- Portfolio
+  - Business Name
+    - Acquisition
+    - Due Diligence
+    - Legal
+    - Lease
+    - Financials
+    - Licensing
+    - Vendors
+    - Post-Close
+    - Reports
+
+Use naming conventions such as:
+{BusinessName} - {DocumentType} - {DocumentId} - {YYYY-MM-DD}
+
+Examples:
+True Blue Auto Care - Tax Returns - d1 - 2026-04-07.pdf
+True Blue Auto Care - Lease Agreement - d2 - 2026-04-07.pdf
+
+The UI should show both:
+- human-friendly document name
+- underlying source reference / file link
+
+==================================================
+GOOGLE SHEETS / DATA TABLE REQUIREMENT
+==================================================
+
+The structured data extracted by the n8n workflow must be written into Google Sheets (or equivalent table abstraction in v1).
+
+The app should treat this as a data table layer for:
+- extracted document values
+- verification results
+- workflow triggers
+- status tracking
+- reporting inputs
+- financial mapping
+- AI analytics inputs
+
+Design the system so each extracted record is associated with:
+- business ID
+- deal ID
+- document ID
+- document type
+- upload date
+- source file ID
+- extracted fields
+- verification confidence
+- review status
+- workflow relevance
+
+The purpose of the data table is to allow more accurate calls and automations when the next workflow step needs to execute.
+
+The system should use structured extracted data to power:
+- checklist completion logic
+- financial dashboards
+- AI reporting
+- compliance tracking
+- due diligence summaries
+- future investor/lender reports
+
+==================================================
+DOCUMENT CENTER UPGRADE
+==================================================
+
+The document center must support:
+- portfolio-wide document search
+- business-level document search
+- document type filters
+- status filters
+- verification score filters
+- missing document alerts
+- original file retrieval
+- extracted data preview
+- report link
+- workflow readiness status
+
+Every document row/card should show:
+- business name
+- document type
+- uploaded date
+- verification state
+- confidence score
+- extracted data snapshot
+- source file link
+- “View Original PDF” action
+- “View Verification Report” action
+
+==================================================
+WORKFLOW EXECUTION LOGIC
+==================================================
+
+The product must be smart enough to use extracted structured data to trigger or support later workflows.
+
+Example:
+- If lease data has already been extracted into the table, lease workflow pages should read from that data
+- If tax return revenue has already been extracted, financial dashboards and diligence pages should use that data
+- If verification confidence is low, a manual review task should be triggered
+- If a required document is missing for one business, only that business should show the blocker
+
+The platform must behave like:
+“The system remembers what was learned from every document and uses it later.”
+
+==================================================
+REPORTING / ANALYTICS DATA SOURCE RULE
+==================================================
+
+Reports should not rely only on manual entry.
+
+The reporting engine must be designed to read from:
+- extracted document tables
+- financial integrations
+- uploaded statements
+- bank imports
+- QuickBooks data
+- Tekmetric data
+- vendor/supplier data
+
+The app should combine:
+- original source documents
+- structured extracted data
+- live financial integrations
+to produce more accurate dashboards and reports.
+
+==================================================
+ORIGINAL SOURCE TRACEABILITY
+==================================================
+
+Every number shown in reports should be traceable when possible.
+
+The user should be able to drill down from:
+report → metric → source data → original document/file
+
+This is critical for:
+- lender trust
+- investor trust
+- diligence
+- audit readiness
+- future exit process
+- scaling confidence
+
+==================================================
+MULTI-BUSINESS PERMISSIONS
+==================================================
+
+Permissions must support:
+- access by business
+- access by module
+- access by deal stage
+- access by document type
+- access by financial sensitivity
+
+Example:
+- a seller should only see their business workspace
+- an advisor may only see assigned deals
+- a CFO may see operating businesses and reports
+- a buyer/admin sees everything
+
+==================================================
+DESIGN / UX REQUIREMENT
+==================================================
+
+Do not design this as a cluttered database tool.
+
+Even with multiple businesses and multiple workflows, the UX must remain:
+- clean
+- premium
+- intuitive
+- controlled
+- visually organized
+- highly actionable
+
+The user should feel:
+“I’m managing a portfolio of opportunities and businesses, not drowning in files.”
+
+==================================================
+DELIVERABLES
+==================================================
+
+Produce:
+1. updated multi-business information architecture
+2. Portfolio Command Center
+3. lead / active deal / operating shop lifecycle model
+4. business workspace architecture
+5. multi-business document center
+6. Google Drive storage architecture
+7. Google Sheets structured data architecture
+8. original document retrieval flow
+9. n8n-connected document processing flow
+10. source-trace reporting logic
+11. permission model across multiple businesses
+12. wireframes for:
+   - Portfolio Command Center
+   - Active Deals board
+   - Operating Shops board
+   - Multi-business Document Center
+   - Business Workspace Overview
+   - Document Detail with Original PDF + Extracted Data + Report
+13. UX rationale explaining how this design supports simultaneous acquisitions and long-term ownership scaling
+
+==================================================
+EXECUTION RULES
+==================================================
+
+- Treat every business as its own object/workspace in the system
+- Build portfolio-level views on top of business-level records
+- Preserve original files in Google Drive
+- Preserve structured extracted data in Google Sheets/data tables
+- Ensure both original documents and extracted data are always accessible
+- Make document intelligence reusable across downstream workflows
+- Design for simultaneous deals from the beginning

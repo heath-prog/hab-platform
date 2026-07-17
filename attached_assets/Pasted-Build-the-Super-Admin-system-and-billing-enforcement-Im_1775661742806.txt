@@ -1,0 +1,120 @@
+Build the Super Admin system and billing enforcement. Implement all 5 parts below in one shot.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 1 — DATABASE: user roles + billing status
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Add these columns and table to the DB init:
+
+ALTER TABLE deal_users ADD COLUMN IF NOT EXISTS billing_status TEXT NOT NULL DEFAULT 'active';
+-- billing_status values: 'active' | 'past_due' | 'suspended'
+
+ALTER TABLE deal_users ADD COLUMN IF NOT EXISTS billing_suspended_at TIMESTAMPTZ;
+ALTER TABLE deal_users ADD COLUMN IF NOT EXISTS billing_notes TEXT;
+
+CREATE TABLE IF NOT EXISTS payment_appeals (
+  id SERIAL PRIMARY KEY,
+  clerk_id TEXT NOT NULL,
+  user_name TEXT,
+  user_email TEXT,
+  message TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending',  -- 'pending' | 'approved' | 'denied'
+  reviewed_by TEXT,
+  reviewed_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+Also set Heath Blake's account as super_admin. Find Heath's record in deal_users where name = 'Heath Blake' (or email contains 'heath') and set role = 'super_admin'.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 2 — BACKEND: billing middleware + appeal endpoints
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Create artifacts/api-server/src/routes/admin.ts with these endpoints (all require Clerk auth):
+
+GET /api/admin/users
+  - Requires super_admin role (check deal_users.role for the authenticated clerk_id)
+  - Return all users with: clerk_id, name, email, role, billing_status, billing_suspended_at, created_at
+
+POST /api/admin/users/:clerkId/suspend
+  - Requires super_admin
+  - Set billing_status = 'suspended', billing_suspended_at = NOW()
+
+POST /api/admin/users/:clerkId/restore
+  - Requires super_admin
+  - Set billing_status = 'active', billing_suspended_at = NULL
+
+GET /api/billing/status
+  - Returns { billingStatus: 'active' | 'past_due' | 'suspended' } for the authenticated user
+
+POST /api/billing/appeal
+  - Body: { message: string }
+  - No auth required (suspended users can't auth)... wait, they can still auth with Clerk, they just can't use the app. So require Clerk auth.
+  - Insert into payment_appeals table with user's clerk_id, name, email from deal_users
+
+GET /api/admin/appeals
+  - Requires super_admin
+  - Return all payment_appeals ordered by created_at DESC
+
+POST /api/admin/appeals/:id/approve
+  - Requires super_admin
+  - Set appeal status = 'approved', reviewed_by = admin clerk_id, reviewed_at = NOW()
+  - Also set the user's billing_status = 'active'
+
+Register the admin router in the main server file.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 3 — FRONTEND: BillingSuspended page
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Create artifacts/acquisition-dashboard/src/pages/BillingSuspended.tsx
+
+This page shows when a user's billing_status is 'suspended'. It should:
+- Dark, serious design — not a soft error page
+- Show this EXACT message (use it verbatim, styled with appropriate typography):
+
+  Headline: "Your Bill Needs to Be Paid."
+
+  Body: "We don't care how you feel about it — your account has been suspended due to a past-due balance. Submit a payment appeal below. It will be reviewed by AI — yes, the same AI that has been watching your deals, tracking your documents, and making sure nothing slips through the cracks of your acquisition. Once payment is verified, your access is restored automatically. This tool is literally running your business. Let's keep it running."
+
+- Below the message: a textarea labeled "Appeal Message" + a "Submit Payment Appeal" button
+- On submit: POST to /api/billing/appeal with the message
+- Success state: "Your appeal has been submitted. We'll review it shortly."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 4 — FRONTEND: billing gate in App.tsx
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+In artifacts/acquisition-dashboard/src/App.tsx:
+
+After the user is authenticated (inside the auth-gated section), fetch GET /api/billing/status on app load.
+
+If billingStatus === 'suspended':
+  - Render <BillingSuspended /> for ALL routes except /join
+  - Do NOT render the normal app/sidebar/routes at all
+
+If billingStatus === 'active' or 'past_due':
+  - Render normally (past_due users can still use the app but should see a yellow banner "Your account has a past-due balance. Please update your payment method to avoid interruption.")
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 5 — FRONTEND: Admin Console page
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Expand artifacts/acquisition-dashboard/src/pages/AdminConsole.tsx (it already exists) to show:
+
+Tab 1: "Users"
+- Table of all users: Name, Email, Role, Billing Status, Joined date
+- Each row has: "Suspend" button (red, only if active/past_due) or "Restore" button (green, only if suspended)
+- Clicking Suspend calls POST /api/admin/users/:id/suspend, then refreshes the list
+- Show a badge for billing_status: green for active, yellow for past_due, red for suspended
+
+Tab 2: "Payment Appeals"
+- List of all pending payment appeals: user name, email, appeal message, submitted date
+- Each has an "Approve & Restore Access" button (calls POST /api/admin/appeals/:id/approve)
+- Show approved appeals in a separate section below
+
+The Admin Console should only be visible/accessible to users where role = 'super_admin'. If a non-admin tries to navigate to /admin, redirect them to /.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SUCCESS CRITERIA:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- Heath (super_admin) can open Admin Console, see all users, and suspend/restore any account
+- A suspended user sees the "Pay your bill" page immediately on login — they cannot access any part of the app
+- The suspended user can submit a payment appeal from that page
+- Heath sees the appeal in Admin Console and can approve it with one click, which restores access immediately
+- Past-due users see a yellow warning banner but can still use the app

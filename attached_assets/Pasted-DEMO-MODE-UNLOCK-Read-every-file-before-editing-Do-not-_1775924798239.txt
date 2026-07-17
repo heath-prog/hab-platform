@@ -1,0 +1,57 @@
+DEMO MODE UNLOCK — Read every file before editing. Do not guess at what the code currently contains. This is a one-shot complete change covering all feature gates.
+
+We are in active development and demo mode. The app has several features hidden behind completion gates (entity setup locks, deal stage gates, flags on business data). ALL of these must be removed so every section is always visible and accessible for development and demo purposes.
+
+Do NOT delete the underlying features — only remove the conditions that hide or lock them.
+
+===================================================================
+LOCK 1 — Financial Management page gated behind financialManagementActive flag
+===================================================================
+
+In the Sidebar component and anywhere else in the codebase, Financial Management is only shown when business.financialManagementActive === true.
+
+Find every instance of financialManagementActive in the codebase. Remove the conditional check so Financial Management always shows in the sidebar and is always accessible. Leave the page and its content intact.
+
+Also: in the portfolio seed data (api-server/src/routes/portfolio.ts or wherever businesses are seeded), set financialManagementActive: true for both True Blue Auto Care and Prestige Auto Works so the DB records reflect this.
+
+===================================================================
+LOCK 2 — Overview milestones show "Entity Setup Required" lock badges
+===================================================================
+
+In the Overview page (Overview.tsx or similar), deal stage milestone items are locked and show a lock badge/icon when entity setup is not complete.
+
+Find this conditional locking logic. Remove it. All 9 milestone steps should always be visible, clickable, and unlocked regardless of entity setup completion status. Keep the milestone list and the ability to check them off — just remove the lock state and any "Entity Setup Required" labels or icons.
+
+===================================================================
+LOCK 3 — Any sidebar nav items hidden based on deal stage or conditions
+===================================================================
+
+The Sidebar component may conditionally hide certain nav sections based on the business's deal stage (e.g., hiding Operations sections for deals in Lead or Due Diligence stage).
+
+Find these conditions. Remove them. ALL sidebar sections must always be visible for every business regardless of deal stage:
+- ACQUISITION: Overview, Documents, LOI, Contacts, Financials
+- PRE-CLOSE SETUP: New Entity Setup, Lease, License & Compliance, Risk Tracker
+- OPERATIONS: Day 1 Takeover, 30-Day Plan, Invoice Inbox, Review Queue (with badge)
+- BOTTOM: Financial Management, Integrations & Webhooks
+
+===================================================================
+LOCK 4 — Any other feature gates, "coming soon" states, or disabled states
+===================================================================
+
+Search the codebase for:
+- disabled={true} or disabled conditions tied to deal stage or completion flags
+- "coming soon" text or similar placeholder states
+- Any feature hidden behind a boolean flag on the business object other than financialManagementActive (which you already fixed above)
+- Any onClick handlers that are no-ops when a prerequisite isn't met
+
+Remove these gates. Everything should be live and clickable.
+
+===================================================================
+VERIFICATION CHECKLIST:
+===================================================================
+1. Both True Blue and Prestige sidebars show ALL sections (no hidden items)
+2. Financial Management tab visible and clickable for both businesses
+3. Overview milestones have no lock icons or "Entity Setup Required" messages
+4. Clicking any milestone checks/unchecks it without prerequisite gates
+5. No "coming soon" or disabled states on any page
+6. All changes are in place and the app builds without errors

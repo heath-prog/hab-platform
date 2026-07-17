@@ -1,0 +1,128 @@
+Short answer: yes, it can be structured—but not in a straight, vanilla way.
+A $100K down payment on a $1.8M deal (~5.5% equity) will require creative SBA structuring, not a standard 10% equity injection.
+
+I’ll show you exactly how to make this bankable.
+
+⚠️ First — Reality Check (SBA Requirement)
+
+Under standard Small Business Administration 7(a) rules:
+
+Required equity injection: ~10% (≈ $180K)
+You are proposing: $100K (~5.5%)
+
+👉 Gap: $80K
+
+So we must bridge that gap in a way the lender can justify to SBA.
+
+🧠 Best Structure to Make $100K Work (This Gets Approved)
+✅ Structure: Buyer Equity + Seller Note (On Full Standby)
+Deal Breakdown:
+Purchase Price: $1,800,000
+Buyer Cash Injection: $100,000
+Seller Carry: $80,000 (FULL STANDBY)
+SBA Loan: $1,620,000
+🔑 Why This Works
+
+SBA allows:
+
+Seller notes on full standby (no payments for 24 months)
+to count as equity injection
+
+👉 So:
+
+Your $100K = real cash
+Seller’s $80K = “equity equivalent”
+
+✅ Total “equity” = $180K (10%)
+
+💸 Debt Structure Impact
+Bank Loan:
+$1.62M @ 11.5%, 10 years
+Annual Debt Service ≈ $277K
+Seller Note:
+$80K
+No payments for 24 months
+
+👉 SBA DSCR calculation EXCLUDES seller note
+
+📊 Updated DSCR (Still Strong)
+
+Using 2024 SDE (~$500K):
+
+👉 DSCR = 500K / 277K = 1.80x
+
+✅ WELL ABOVE 1.25x requirement
+
+🔥 This Is Actually a STRONGER DEAL
+
+From a lender perspective:
+
+You just improved the deal because:
+Seller has skin in the game
+Seller believes in business performance
+Reduced buyer cash risk
+Better alignment post-close
+
+👉 Banks LIKE this structure
+
+🏦 How You Present This to the Lender
+
+Use this wording (this matters):
+
+“The transaction will be structured with a combination of buyer equity and a seller note on full standby for 24 months, meeting SBA’s 10% equity requirement while strengthening the overall deal through seller participation.”
+
+⚠️ Key Conditions (Do NOT mess these up)
+Seller Note MUST:
+Be on FULL standby (no principal or interest payments)
+Minimum 24 months
+Be properly documented
+
+If not:
+👉 It will NOT count as equity
+
+🚨 Potential Pushback (and how we handle it)
+Lender Concern:
+
+“Why is buyer only putting in $100K?”
+
+Your Answer:
+Strong DSCR (1.8x)
+Industry experience (huge advantage)
+Seller participation reduces risk
+Business trending upward
+
+👉 You position it as risk-mitigated, not undercapitalized
+
+🧠 Pro Move (If You Want Even More Approval Strength)
+Option: Add Performance-Based Seller Note
+$80K standby note
+PLUS optional earnout tied to revenue
+
+👉 Shows:
+
+Seller confidence
+Buyer protection
+Bank comfort
+🏁 Final Underwriter Verdict (With $100K Down)
+
+👉 APPROVABLE — IF structured correctly
+
+Requirements:
+Seller note on full standby ✅
+Clean SDE justification ✅
+Strong borrower profile (you) ✅
+🔥 Bottom Line
+
+You’re not short on money—you just need to structure the money correctly.
+
+This is exactly how experienced buyers:
+
+Buy with less cash
+Keep liquidity
+Still get SBA approval
+
+If you want, I can:
+
+Draft the seller note standby agreement (bank-ready language)
+Update your LOI to reflect this structure
+Or build the exact deal structure page lenders expect in your package

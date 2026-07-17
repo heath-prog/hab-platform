@@ -1,0 +1,158 @@
+CRITICAL ARCHITECTURE FIX: Move portfolio/business data from localStorage to PostgreSQL so it is never lost again. Implement everything below in one shot.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 1 — ADD TWO DATABASE TABLES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+In the DB init file (artifacts/api-server/src/lib/db.ts or wherever schema is set up), add:
+
+CREATE TABLE IF NOT EXISTS portfolios (
+  id SERIAL PRIMARY KEY,
+  owner_clerk_id TEXT NOT NULL UNIQUE,
+  name TEXT NOT NULL DEFAULT 'My Portfolio',
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS businesses (
+  id TEXT PRIMARY KEY,
+  portfolio_id INTEGER REFERENCES portfolios(id) ON DELETE CASCADE,
+  owner_clerk_id TEXT NOT NULL,
+  data JSONB NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 2 — CREATE /api/portfolio ROUTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Create artifacts/api-server/src/routes/portfolio.ts with these endpoints (all require Clerk auth via getAuth from @clerk/express):
+
+GET /api/portfolio
+  - Find portfolio by owner_clerk_id
+  - If none exists, INSERT a new portfolio, then INSERT the two seed businesses below
+  - Return { id, name, businesses: [] } where businesses are the data JSONB fields as an array
+
+PUT /api/portfolio
+  - Body: { name: string }
+  - UPDATE portfolio name for authenticated user
+
+POST /api/portfolio/businesses
+  - Body: full Business JSON object
+  - INSERT ... ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data, updated_at = NOW()
+
+DELETE /api/portfolio/businesses/:id
+  - DELETE business where id = $1 AND owner_clerk_id = $2
+
+Register this router in the main server entry file at prefix /api/portfolio (same place email routes are registered).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 3 — SEED DATA (insert on first portfolio creation)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+When a new portfolio is created for the first time, seed these two businesses (insert both into the businesses table):
+
+Business 1:
+{
+  "id": "true-blue",
+  "name": "True Blue Auto Care",
+  "entityName": "True Blue Auto Care Inc.",
+  "seller": "Saj Zoghet",
+  "buyer": "Heath Blake",
+  "buyerEntity": "HAB Enterprises 3 LLC",
+  "dealPrice": 300000,
+  "stage": "diligence",
+  "acquisitionType": "asset",
+  "industry": "Automotive Repair",
+  "targetCloseDate": "2026-07-15",
+  "description": "Asset purchase of True Blue Auto Care Inc. $300K purchase price. Rent: $8K/mo. Seller note: $2,250/mo.",
+  "createdAt": "2026-04-08T00:00:00Z"
+}
+
+Business 2 (CRITICAL — this is a real active acquisition that must be restored):
+{
+  "id": "prestige-auto-works",
+  "name": "Prestige Auto Works",
+  "entityName": "Prestige Auto Works",
+  "seller": "Andre Kamel",
+  "buyer": "Heath Blake",
+  "buyerEntity": "HAB Enterprises 5 LLC",
+  "dealPrice": 1800000,
+  "stage": "lead",
+  "acquisitionType": "asset",
+  "financingTypes": ["sba"],
+  "industry": "Automotive Repair",
+  "targetCloseDate": "2026-09-15",
+  "description": "European auto repair shop in Elk Grove. SBA needed to purchase business.",
+  "tags": ["Asset Purchase", "SBA", "Rollup"],
+  "createdAt": "2026-04-08T00:00:00Z"
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 4 — ADD ASYNC FUNCTIONS TO storage.ts
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Keep ALL existing type definitions and keep loadPortfolio()/savePortfolio() exactly as-is (do NOT remove them).
+
+Add these NEW async functions at the bottom of artifacts/acquisition-dashboard/src/lib/storage.ts:
+
+export async function loadPortfolioFromDB(): Promise<PortfolioState> {
+  try {
+    const res = await fetch('/api/portfolio', { credentials: 'include' });
+    if (!res.ok) return loadPortfolio();
+    const data = await res.json();
+    return { businesses: data.businesses || [], name: data.name };
+  } catch {
+    return loadPortfolio();
+  }
+}
+
+export async function saveBusinessToDB(business: Business): Promise<void> {
+  try {
+    await fetch('/api/portfolio/businesses', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(business),
+    });
+  } catch (e) {
+    console.error('Failed to save business to DB:', e);
+  }
+}
+
+export async function deleteBusinessFromDB(id: string): Promise<void> {
+  try {
+    await fetch(`/api/portfolio/businesses/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+  } catch (e) {
+    console.error('Failed to delete business from DB:', e);
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 5 — UPDATE PortfolioHome.tsx
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+In artifacts/acquisition-dashboard/src/pages/PortfolioHome.tsx:
+
+1. Import loadPortfolioFromDB and saveBusinessToDB from storage.ts
+
+2. Replace the synchronous loadPortfolio() call at component init with an async useEffect:
+   - On mount, call loadPortfolioFromDB()
+   - Show a loading spinner while fetching
+   - Once data loads, setPortfolio(data)
+
+3. When a new business is added via IntakeWizard:
+   - Keep the existing savePortfolio() call (for backward compat)
+   - Also call saveBusinessToDB(newBusiness) immediately after
+
+4. REMOVE the onboarding modal that checks portfolio.businesses.length === 0 and portfolioSetupDismissed. Replace it with a simple empty state: if businesses array is empty after loading, show a centered message "No businesses yet" with an "+ Add Business" button. This modal was causing data loss.
+
+5. Keep the existing "+ Add Business" button and IntakeWizard flow.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SUCCESS CRITERIA:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- Portfolio Home shows BOTH "True Blue Auto Care" AND "Prestige Auto Works" from the database
+- Business data survives browser refresh, cache clear, and new browser sessions
+- Existing /b/true-blue/* workspace pages still work
+- The onboarding modal that caused data loss is gone
+- When a new user signs up, their portfolio starts with the two seed businesses above

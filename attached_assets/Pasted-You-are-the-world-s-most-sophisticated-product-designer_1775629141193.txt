@@ -1,0 +1,498 @@
+You are the world’s most sophisticated product designer, UX architect, behavioral design strategist, workflow systems thinker, and premium SaaS interface designer.
+
+You are designing a category-defining AI-powered Ownership Operating System for automotive repair shop acquisitions, operations, and exit planning.
+
+This is not a generic dashboard.
+This is a live-deal command center for real-world business acquisition and ownership.
+
+The platform must guide users from:
+initial conversation → NDA → LOI → transaction structure decision → due diligence → entity setup if needed → close → Day 1 takeover → daily operations → scaling → exit readiness.
+
+This product is being used on real acquisitions.
+The interface must feel credible for:
+- buyers
+- sellers
+- attorneys
+- CPAs
+- bankers
+- private equity-minded operators
+- acquisition advisors
+- automotive shop owners
+
+It must look and feel:
+- premium
+- intelligent
+- smooth
+- highly strategic
+- addictive in a productivity-driven way
+- trustworthy enough for financial and legal workflows
+- dynamic enough to feel state of the art
+
+==================================================
+PRIMARY PRODUCT OBJECTIVE
+==================================================
+
+Design an app that makes buying, operating, and eventually exiting an automotive repair business feel:
+- clear
+- guided
+- achievable
+- powerful
+- exciting
+- rewarding
+
+The app should play to the psychology of:
+- progress
+- control
+- confidence
+- momentum
+- trust
+- achievement
+- wealth-building
+
+Every major screen should answer:
+- What stage am I in?
+- What is blocking me?
+- What should I do next?
+- How close am I to winning?
+
+==================================================
+CRITICAL NEW FEATURE: TRANSACTION STRUCTURE ROUTER
+==================================================
+
+The app must include a dedicated decision page and workflow engine for:
+
+1. STOCK PURCHASE
+2. ASSET PURCHASE
+
+This is a required branching point in the acquisition process.
+
+The product must not allow the user to continue into later close-readiness steps without first selecting and confirming the intended transaction structure.
+
+This branch must be visually important and operationally intelligent.
+
+Create a dedicated workflow step called:
+
+“Transaction Structure”
+
+This step should:
+- educate the user on the practical difference between stock purchase and asset purchase
+- clearly show operational consequences of each path
+- store the selected structure as a deal-level setting
+- dynamically change downstream workflows, tasks, required documents, and readiness logic
+
+==================================================
+STOCK PURCHASE PATH
+==================================================
+
+If user selects STOCK PURCHASE:
+- continue under existing seller entity acquisition workflow
+- preserve existing entity continuity logic
+- keep stock transfer, corporate authority, and ownership transfer milestones active
+- emphasize hidden liability review, tax exposure review, litigation review, corporate document review, and stock certificate transfer workflow
+- trigger stock-purchase-specific due diligence requirements
+- show continuity-sensitive items like:
+  - stock ledger
+  - corporate records
+  - officer/director authorizations
+  - shareholder approvals
+  - legacy liabilities
+  - tax exposure
+  - existing licenses and change/update requirements
+
+The UI should make stock purchase feel:
+- fast
+- continuity-driven
+- potentially efficient
+- but risk-sensitive
+
+==================================================
+ASSET PURCHASE PATH
+==================================================
+
+If user selects ASSET PURCHASE:
+the app must require creation of a NEW BUYER ENTITY workflow before the user can advance to the rest of the acquisition sequence.
+
+This is mandatory.
+
+The app must create a dedicated step and page group called:
+
+“New Entity Setup”
+
+This module must function like a guided pre-close launch checklist for the acquisition vehicle.
+
+The system must explain:
+“In an asset purchase, assets are generally acquired into a new or designated buyer entity. Before proceeding, the buyer must establish the acquiring entity and complete required setup tasks.”
+
+The workflow must include:
+- entity type selection
+- state of formation selection
+- entity naming workflow
+- entity availability/search step
+- formation filing step
+- EIN step
+- bank account preparation step
+- tax/account registration step
+- licensing and permit setup planning step
+- payroll/workers’ comp/insurance planning step
+- operating agreement or corporate governance document step
+- registered agent / address capture
+- beneficial ownership / compliance placeholder if required
+- new business license / automotive licensing workflow planning
+- Day 1 legal operating readiness confirmation
+
+==================================================
+ASSET PURCHASE ENTITY SETUP WORKFLOW REQUIREMENTS
+==================================================
+
+The new entity setup must be a first-class product workflow, not a note or checklist buried in settings.
+
+Build a full guided wizard with progress tracking.
+
+Required sub-steps:
+
+1. Entity Strategy
+- choose LLC / corporation / other
+- choose state
+- name the acquiring entity
+- note whether entity already exists or must be formed
+
+2. Name Search + Formation Prep
+- capture proposed legal name
+- link to state formation/search resources
+- capture formation status:
+  - not started
+  - name selected
+  - filed
+  - approved
+- attach formation documents when available
+
+3. EIN Setup
+- guide user to apply for EIN
+- track EIN status:
+  - not started
+  - submitted
+  - assigned
+- allow secure storage of EIN confirmation
+
+4. Banking Readiness
+- checklist for:
+  - EIN received
+  - formation approved
+  - bank selected
+  - account opened
+  - authorized signer confirmed
+- store banking setup status
+
+5. Tax / Permit Setup
+- seller’s permit / tax registration tracking where applicable
+- payroll account tracking
+- state tax account tracking
+- business license tracking
+- local permit tracking
+
+6. Automotive Regulatory Setup
+- automotive repair licensing / registration planning
+- smog / station / related licensing planning if applicable
+- ownership change implications
+- cannot-operate warnings if licenses are not active
+
+7. Insurance / Employment Readiness
+- general liability
+- garage liability
+- workers’ comp
+- payroll setup
+- employee onboarding preparation
+
+8. Governance / Legal Docs
+- operating agreement or bylaws
+- resolutions / member consent
+- authority to acquire assets
+- signature authority confirmation
+
+9. Readiness Gate
+The app should calculate:
+- Entity Ready %
+- Compliance Ready %
+- Day 1 Legal Readiness %
+- Close Readiness %
+
+The user should not be shown as “Ready to Close” if the entity setup is incomplete.
+
+==================================================
+RESOURCE HUB / OFFICIAL LINKS / ACTIONABLE HELP
+==================================================
+
+The app must include a dynamic Resource Hub tied to workflow context.
+
+When the user is on asset purchase / entity setup screens, surface official resources and helpful guidance links.
+
+For California workflows, include official resource references for:
+- California Secretary of State bizfile filing and search
+- IRS EIN application
+- California CDTFA permit/account registration
+- California BAR ownership change / new registration guidance
+
+The app should be designed so resources can vary by state.
+
+For v1, implement:
+- California-first official resource links
+- architecture to support other states later
+
+Resource cards must include:
+- title
+- short explanation
+- why it matters
+- action button
+- “open official site” CTA
+- “mark complete” CTA after user returns
+- note field
+- attach-file field for proof of completion
+
+The resource hub must feel like:
+“Your deal assistant already knows what agency or filing you need next.”
+
+==================================================
+EXTERNAL RESOURCES TO SUPPORT IN CALIFORNIA-FIRST V1
+==================================================
+
+Model the UI to support resource cards for:
+- California Secretary of State business filing/search portal
+- IRS online EIN application
+- CDTFA permit / registration portal
+- California BAR ownership-change and registration guidance
+
+These resources matter because:
+- California SOS supports online business filing and search
+- the IRS issues EINs online for free
+- CDTFA handles seller’s permit / permit registrations
+- BAR says ownership changes generally require new ARD registration and new station licenses where applicable, and business cannot operate until BAR issues new licenses
+
+==================================================
+WORKFLOW AUTOMATION BEHAVIOR
+==================================================
+
+The app must dynamically change required tasks based on structure choice.
+
+Examples:
+
+If STOCK PURCHASE:
+- activate stock transfer checklist
+- corporate records review
+- stock certificates
+- officer/shareholder approvals
+- liability review
+- existing-entity continuity tasks
+
+If ASSET PURCHASE:
+- deactivate stock certificate transfer tasks
+- activate new entity formation tasks
+- activate new bank / new tax account / new licensing planning tasks
+- activate assignment/transfer and retitling tasks for:
+  - lease
+  - vendor accounts
+  - digital assets
+  - phone numbers
+  - website/domain
+  - customer database
+  - equipment lists
+  - inventory transfer
+  - titled vehicles where applicable
+
+The user should instantly feel:
+“The app knows what kind of deal I’m doing and is changing the playbook for me.”
+
+==================================================
+NEW PAGE REQUIREMENT
+==================================================
+
+Add a premium full-screen page to the product flow called:
+
+“Structure the Deal”
+
+This page should:
+- visually compare Stock Purchase vs Asset Purchase
+- show pros/considerations in executive-friendly language
+- use side-by-side cards
+- include risk profile language
+- include operational impacts
+- include compliance impacts
+- include next-step implications
+
+This page should feel like a decisive strategic moment.
+
+Suggested visual language:
+- premium comparison cards
+- confidence badges
+- workflow preview beneath each choice
+- “Recommended next steps” panel
+- animated branch preview
+
+After selection, the app should route the user to the correct next module automatically.
+
+==================================================
+BUYER UX REQUIREMENT
+==================================================
+
+On buyer/admin side:
+- show full structure logic
+- show warnings and dependencies
+- show gating logic
+- show resource links
+- show progress scores
+
+On seller side:
+- do NOT overwhelm seller with transaction-structure complexity unless needed
+- seller should only see requests relevant to them
+- keep seller portal simple, upload-first, respectful, and clear
+
+==================================================
+DOCUMENT INTELLIGENCE EXPANSION
+==================================================
+
+The document center must also change by transaction structure.
+
+For STOCK PURCHASE, emphasize:
+- stock ledger
+- governing docs
+- prior returns
+- liabilities
+- debt
+- payroll
+- litigation/compliance
+- tax exposure
+- entity documents
+
+For ASSET PURCHASE, emphasize:
+- asset list
+- bill of sale prep
+- assignment agreements
+- lease assignment or new lease
+- vehicle title transfer
+- equipment schedule
+- inventory schedule
+- IP/domain transfer
+- customer/vendor transfer items
+- new entity docs
+- new permits / new registrations
+
+The verification system should tag documents as:
+- stock path
+- asset path
+- both
+- regulatory
+- closing-critical
+- day-1-critical
+
+==================================================
+COMPLIANCE / OPERATING READINESS LOGIC
+==================================================
+
+The app must incorporate a compliance warning engine.
+
+For asset purchase path, surface warnings such as:
+- “New entity not yet formed”
+- “EIN not yet issued”
+- “Bank account not ready”
+- “Tax registration incomplete”
+- “Automotive licensing review pending”
+- “Close readiness blocked until entity setup is complete”
+
+For California-first v1, the compliance engine should be aware that:
+- a new owner generally must apply for new BAR registration
+- applicable station licenses must also be newly applied for on ownership change
+- some registrations/licenses are not transferable
+- the business may not operate until required BAR licensing is issued
+
+==================================================
+RESOURCE CENTER UX REQUIREMENT
+==================================================
+
+Create a dedicated page or side panel called:
+“Resources & Filings”
+
+This should include:
+- official filing resources
+- contact/help resources
+- filing status
+- proof upload
+- notes
+- reminders
+- deadlines
+- associated deal stage
+
+The design should make resource management feel like part of the command center, not a boring help page.
+
+==================================================
+VISUAL / PSYCHOLOGICAL EXPERIENCE
+==================================================
+
+The structure router and new entity setup should still feel:
+- premium
+- smooth
+- confident
+- gamified in an executive way
+- forward-moving
+
+Use:
+- progress bars
+- milestone rings
+- readiness scorecards
+- “You are 2 steps away from Entity Ready”
+- “Formation approved — banking can now begin”
+- “EIN complete — tax registration unlocked”
+- “Asset purchase workflow now active”
+
+Do not make this childish.
+Make it feel like elite execution software.
+
+==================================================
+DELIVERABLES
+==================================================
+
+Produce:
+1. updated information architecture
+2. transaction structure router page
+3. stock purchase workflow map
+4. asset purchase workflow map
+5. new entity setup wizard
+6. resources & filings center
+7. compliance warning engine
+8. document center logic by structure type
+9. readiness score logic
+10. buyer and seller experience adjustments
+11. wireframes for:
+   - Structure the Deal page
+   - New Entity Setup page
+   - Resources & Filings center
+   - Asset Purchase Readiness dashboard
+12. component specs for:
+   - status cards
+   - filing trackers
+   - official resource cards
+   - dependency alerts
+   - gating modals
+13. UX rationale explaining why the branching workflow improves clarity, adoption, and execution
+
+==================================================
+EXECUTION RULES
+==================================================
+
+- Start by updating the information architecture first.
+- Then add the Transaction Structure step into the acquisition flow.
+- Then build the Stock Purchase and Asset Purchase branches.
+- Then build the Asset Purchase New Entity Setup workflow.
+- Then connect resources, compliance, and document logic.
+- Every page must have a primary next action.
+- Every branch must have progress and blockers visible.
+- Avoid generic checklist software design.
+- Make this feel like a premium ownership operating system.
+
+FINAL INSTRUCTION
+
+Design this platform as if it will become the dominant AI operating system for buying, operating, and exiting independent automotive repair businesses in the United States.
+
+The transaction structure branch must feel brilliant, necessary, and effortless.
+
+Make it elegant.
+Make it serious.
+Make it powerful.
