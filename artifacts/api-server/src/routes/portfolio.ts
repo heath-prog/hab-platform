@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { getAuth } from "@clerk/express";
+import type { QueryResult, QueryResultRow } from "pg";
 import { pool } from "../lib/db";
 import { logger } from "../lib/logger";
 
@@ -51,7 +52,7 @@ router.get("/", async (req, res) => {
 
     let portfolio = await pool
       .query("SELECT id, name FROM portfolios WHERE owner_clerk_id = $1", [userId])
-      .then((r) => r.rows[0] as { id: number; name: string } | undefined);
+      .then((r: QueryResult) => r.rows[0] as { id: number; name: string } | undefined);
 
     if (!portfolio) {
       const ins = await pool.query(
@@ -82,7 +83,7 @@ router.get("/", async (req, res) => {
     // External Drive files and document references are NOT removed here —
     // only the app-owned workspace record (JSONB data) is hard-deleted.
     const now = new Date();
-    const expired = bizRows.rows.filter((r) => {
+    const expired = bizRows.rows.filter((r: QueryResultRow) => {
       const biz = (r as { data: Record<string, unknown> }).data;
       return biz.lifecycleState === "trashed"
         && typeof biz.purgeAt === "string"
@@ -94,12 +95,12 @@ router.get("/", async (req, res) => {
       logger.info({ businessId: id }, "Auto-purged expired trashed business");
     }
 
-    const expiredIds = new Set(expired.map((r) =>
+    const expiredIds = new Set(expired.map((r: QueryResultRow) =>
       ((r as { data: Record<string, unknown> }).data.id) as string
     ));
     const liveBusinesses = bizRows.rows
-      .filter((r) => !expiredIds.has(((r as { data: Record<string, unknown> }).data.id) as string))
-      .map((r) => (r as { data: unknown }).data);
+      .filter((r: QueryResultRow) => !expiredIds.has(((r as { data: Record<string, unknown> }).data.id) as string))
+      .map((r: QueryResultRow) => (r as { data: unknown }).data);
 
     return res.json({
       id:         portfolio.id,
@@ -143,7 +144,7 @@ router.post("/businesses", async (req, res) => {
 
     const portfolio = await pool
       .query("SELECT id FROM portfolios WHERE owner_clerk_id = $1", [userId])
-      .then((r) => r.rows[0] as { id: number } | undefined);
+      .then((r: QueryResult) => r.rows[0] as { id: number } | undefined);
 
     if (!portfolio) return res.status(404).json({ error: "Portfolio not found" });
 

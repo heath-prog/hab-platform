@@ -70,10 +70,10 @@ router.get("/me", async (req, res) => {
     const promoted = await promoteSuperAdminIfEligible(row.id);
     if (promoted) row = promoted;
 
-    res.json(toResponse(row));
+    return res.json(toResponse(row));
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ error: "Server error" });
   }
 });
 
@@ -103,9 +103,9 @@ router.post("/", async (req, res) => {
       "INSERT INTO deal_users (clerk_user_id, email, name, role, notes, invited_by) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
       [placeholder, email, name || null, role || "seller", notes || "", uid]
     );
-    res.status(201).json(toResponse(result.rows[0]));
+    return res.status(201).json(toResponse(result.rows[0]));
   } catch (err) {
-    res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ error: "Server error" });
   }
 });
 
@@ -120,9 +120,9 @@ router.patch("/:id", async (req, res) => {
       [role ?? null, name ?? null, notes ?? null, req.params.id]
     );
     if (!result.rows.length) return res.status(404).json({ error: "Not found" });
-    res.json(toResponse(result.rows[0]));
+    return res.json(toResponse(result.rows[0]));
   } catch (err) {
-    res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ error: "Server error" });
   }
 });
 
@@ -137,9 +137,9 @@ router.patch("/:id/permissions", async (req, res) => {
       [JSON.stringify(permissions), req.params.id]
     );
     if (!result.rows.length) return res.status(404).json({ error: "Not found" });
-    res.json(toResponse(result.rows[0]));
+    return res.json(toResponse(result.rows[0]));
   } catch (err) {
-    res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ error: "Server error" });
   }
 });
 

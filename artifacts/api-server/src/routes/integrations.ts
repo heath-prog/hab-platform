@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { getAuth } from "@clerk/express";
+import type { QueryResultRow } from "pg";
 import { pool } from "../lib/db";
 
 const router = Router();
@@ -123,7 +124,7 @@ router.get("/", async (req, res) => {
     const result = await pool.query(
       "SELECT * FROM integration_configs ORDER BY key ASC"
     );
-    const storedMap = new Map(result.rows.map((r) => [r.key, r]));
+    const storedMap = new Map(result.rows.map((r: QueryResultRow) => [r.key as string, r]));
 
     // Always return all required keys, filling in defaults for unconfigured ones
     const configs = REQUIRED_KEYS.map((key) => {
@@ -180,7 +181,7 @@ router.get("/status", async (req, res) => {
       [REQUIRED_KEYS]
     );
     const configured = new Set(
-      result.rows.filter((r) => (r.value as string)?.trim()).map((r) => r.key)
+      result.rows.filter((r: QueryResultRow) => (r.value as string)?.trim()).map((r: QueryResultRow) => r.key as string)
     );
 
     const status = Object.fromEntries(
