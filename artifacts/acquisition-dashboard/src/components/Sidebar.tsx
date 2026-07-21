@@ -6,7 +6,7 @@ import {
   LayoutDashboard, FileText, Phone, TrendingUp, Home,
   Shield, AlertTriangle, CheckSquare, Calendar, ChevronRight,
   LogOut, Users, BarChart3, ArrowLeft, Layers, Activity, Settings2,
-  Inbox, AlertOctagon, Building2, UserPlus, X,
+  Inbox, AlertOctagon, Building2, UserPlus, X, Briefcase,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useDashboard } from "@/lib/context";
@@ -281,10 +281,25 @@ function BusinessSidebarInner({
           </>
         )}
 
-        {/* Admin console — buyer only */}
+        {/* CRM + Admin console — buyer only (fail-closed: isBuyer is false
+            until dealUser has resolved) */}
         {isBuyer && (
           <>
             <div className="my-2 border-t border-sidebar-border opacity-30" />
+            <Link
+              href="/crm"
+              data-testid="nav-crm"
+              className={cn(
+                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 group",
+                location.startsWith("/crm")
+                  ? "bg-sidebar-accent text-white"
+                  : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-white"
+              )}
+            >
+              <Briefcase className="w-4 h-4 flex-shrink-0 opacity-70 group-hover:opacity-100" />
+              <span className="flex-1">CRM</span>
+              {location.startsWith("/crm") && <ChevronRight className="w-3.5 h-3.5 opacity-50" />}
+            </Link>
             <Link
               href="/admin"
               data-testid="nav-admin-console"

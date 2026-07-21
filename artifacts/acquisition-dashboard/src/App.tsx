@@ -31,6 +31,8 @@ import AdminConsole       from "@/pages/AdminConsole";
 import PortfolioHome      from "@/pages/PortfolioHome";
 import JoinPage           from "@/pages/JoinPage";
 import BillingSuspended   from "@/pages/BillingSuspended";
+import CrmPipeline        from "@/pages/CrmPipeline";
+import CrmClientDetail    from "@/pages/CrmClientDetail";
 import NotFound           from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -244,6 +246,11 @@ function AuthenticatedApp() {
             params ? <BusinessWorkspace id={params.id} section="" /> : null
           }
         </Route>
+        {/* CRM (Operate module) — buyer-or-above, gated inside CrmShell */}
+        <Route path="/crm/clients/:id">
+          {(params) => (params ? <CrmClientDetail id={params.id} /> : null)}
+        </Route>
+        <Route path="/crm" component={CrmPipeline} />
         {/* Portfolio admin */}
         <Route path="/admin" component={AdminConsole} />
         {/* Portfolio home — default */}
